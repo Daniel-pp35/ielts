@@ -275,7 +275,7 @@
     <div class="text-xs text-slate-400 mb-4" id="lgHint"></div>
     <textarea id="lgInput" rows="4" class="w-full border-2 border-purple-200 focus:border-purple-500 rounded-xl p-4 text-base leading-7 focus:outline-none" placeholder="在这里写下你的翻译/改写..."></textarea>
     <div class="flex gap-3 mt-4">
-      <button onclick="lgSubmit()" class="bg-purple-600 hover:bg-purple-700 text-white font-bold px-6 py-3 rounded-xl shadow-lg shadow-purple-200">🤖 AI 批改（LRG）</button>
+      <button onclick="lgSubmit()" class="bg-purple-600 hover:bg-purple-700 text-white font-bold px-6 py-3 rounded-xl shadow-lg shadow-purple-200">🤖 AI 批改（LRG）</button><span class="text-xs text-slate-400 self-center ml-2">🔒 AI批改需 <span class="text-purple-600 font-semibold">¥19.9永久解锁</span></span>
       <button onclick="lgPrev()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-3 rounded-xl text-sm font-semibold">← 上一题</button>
       <button onclick="lgNext()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-3 rounded-xl text-sm font-semibold">下一题 →</button>
     </div>
@@ -4281,6 +4281,25 @@ var LG_DATA={
 {topic:"health",src:"Mental health days are important. Employees should take them.",ans:"Granting employees mental health days can reduce burnout, improve productivity, and foster a healthier work-life balance in the long term.",hint:"💡 动名词作主语\n🔄 important→reduce burnout"},
 {topic:"health",src:"People should wash hands frequently. This prevents disease.",ans:"Regular handwashing with soap and water is one of the most effective measures for preventing the spread of infectious diseases and reducing healthcare-associated infections.",hint:"💡 动名词作主语\n🔄 prevents→effective measure for preventing"}]
 };;
+// L&G专项状态
+var lg={cat:"all",idx:0};
+function lgFiltered(){
+  if(lg.cat==="all") return LG_DATA.rewrite;
+  return LG_DATA.rewrite.filter(function(it){return it.topic===lg.cat;});
+}
+function enterLg(){
+  document.getElementById("homePage").classList.add("hidden");
+  document.getElementById("lgPage").classList.remove("hidden");
+  lg.cat="all"; lg.idx=0;
+  lgBuildCats();
+  lgRender();
+  toggleTools(true);
+}
+function backHomeFromLg(){
+  document.getElementById("lgPage").classList.add("hidden");
+  document.getElementById("homePage").classList.remove("hidden");
+  toggleTools(false);
+}
 var LG_CATS=["education","technology","government","urban","society","health","work","economy","environment","media","globalization","crime","women","art","philosophy"];
 function lgBuildCats(){
   var cats=[];
@@ -4393,7 +4412,7 @@ function renderReport(){
 <!-- ===== 浮动工具栏：查词/同义替换 ===== -->
 <div id="writingTools" class="fixed right-4 bottom-4 z-40 flex flex-col gap-2 items-end" style="display:none">
   <!-- 查词展开面板 -->
-  <div id="synoPanel" class="hidden bg-white rounded-2xl shadow-2xl border border-slate-200 p-4 w-80 max-h-[70vh flex flex-col">
+  <div id="synoPanel" class="hidden bg-white rounded-2xl shadow-2xl border border-slate-200 p-4 w-80 max-h-[70vh] flex flex-col">
     <div class="flex items-center justify-between mb-3">
       <span class="text-base font-bold text-slate-700">🔍 查词/同义替换</span>
       <button onclick="toggleSyno()" class="text-slate-400 hover:text-slate-600 text-xl w-7 h-7 flex items-center justify-center rounded-full hover:bg-slate-100">×</button>
