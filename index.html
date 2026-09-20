@@ -256,7 +256,10 @@
 <!-- ============ L&G 专项训练（词汇+语法） ============ -->
 <div id="lgPage" class="hidden max-w-4xl mx-auto px-4 md:px-6 py-8">
   <div class="flex items-center justify-between mb-6">
-    <button onclick="backHomeFromLg()" class="text-slate-500 hover:text-slate-700 text-sm font-medium">← 返回首页</button>
+    <div class="flex items-center gap-3">
+      <button onclick="backHomeFromLg()" class="text-slate-500 hover:text-slate-700 text-sm font-medium">← 返回首页</button>
+      <a href="https://www.kufaka.com/item/43573v" target="_blank" rel="noopener" class="text-xs bg-gradient-to-r from-purple-600 to-pink-500 text-white px-3 py-1.5 rounded-lg font-semibold hover:opacity-90">🛒 永久解锁 ¥19.9</a>
+    </div>
     <div class="text-right">
       <h2 class="text-2xl font-bold text-slate-800">📝 L&G 专项训练</h2>
       <p class="text-sm text-slate-500 mt-1">词汇丰富度(LR) · 语法多样性与准确性(GRA) · 只看语言不看内容</p>
@@ -275,7 +278,7 @@
     <div class="text-xs text-slate-400 mb-4" id="lgHint"></div>
     <textarea id="lgInput" rows="4" class="w-full border-2 border-purple-200 focus:border-purple-500 rounded-xl p-4 text-base leading-7 focus:outline-none" placeholder="在这里写下你的翻译/改写..."></textarea>
     <div class="flex gap-3 mt-4">
-      <button onclick="lgSubmit()" class="bg-purple-600 hover:bg-purple-700 text-white font-bold px-6 py-3 rounded-xl shadow-lg shadow-purple-200">🤖 AI 批改（LRG）</button><span class="text-xs text-slate-400 self-center ml-2">🔒 AI批改需 <span class="text-purple-600 font-semibold">¥19.9永久解锁</span></span>
+      <button onclick="lgSubmit()" class="bg-purple-600 hover:bg-purple-700 text-white font-bold px-6 py-3 rounded-xl shadow-lg shadow-purple-200">🤖 AI 批改（LRG）</button>
       <button onclick="lgPrev()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-3 rounded-xl text-sm font-semibold">← 上一题</button>
       <button onclick="lgNext()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-3 rounded-xl text-sm font-semibold">下一题 →</button>
     </div>
