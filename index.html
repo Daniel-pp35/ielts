@@ -261,12 +261,12 @@
       <a href="https://www.kufaka.com/item/43573v" target="_blank" rel="noopener" class="text-xs bg-gradient-to-r from-purple-600 to-pink-500 text-white px-3 py-1.5 rounded-lg font-semibold hover:opacity-90">🛒 永久解锁 ¥19.9</a>
     </div>
     <div class="text-right">
-      <h2 class="text-2xl font-bold text-slate-800">📝 L&G 专项训练</h2>
-      <p class="text-sm text-slate-500 mt-1">词汇丰富度(LR) · 语法多样性与准确性(GRA) · 只看语言不看内容</p>
+      <h2 class="text-2xl font-bold text-slate-800">📝 L&G 句型改写训练</h2>
+      <p class="text-sm text-slate-500 mt-1">按指定句型改写简单句 · 提交即看解析 · AI异步批改语法</p>
     </div>
   </div>
   <div class="flex items-center justify-between mb-4">
-    <span class="text-sm text-purple-600 font-semibold">📝 简单句改写训练（提升词汇+语法）</span>
+    <span class="text-sm text-purple-600 font-semibold">🎯 句型任务训练（提升语法多样性+词汇丰富度）</span>
     <span class="text-sm text-slate-500">第 <b id="lgIdx" class="text-purple-600">1</b> / <span id="lgTotal">0</span> 题</span>
   </div>
   <!-- 话题筛选 -->
@@ -274,17 +274,58 @@
   <!-- 题目卡片 -->
   <div class="bg-white rounded-2xl shadow-lg border border-slate-100 p-6 mb-4">
     <div class="text-xs font-semibold text-purple-600 mb-2" id="lgTopicTag"></div>
-    <div class="text-lg font-medium text-slate-800 mb-1" id="lgSource"></div>
-    <div class="text-xs text-slate-400 mb-4" id="lgHint"></div>
-    <textarea id="lgInput" rows="4" class="w-full border-2 border-purple-200 focus:border-purple-500 rounded-xl p-4 text-base leading-7 focus:outline-none" placeholder="在这里写下你的翻译/改写..."></textarea>
-    <div class="flex gap-3 mt-4">
-      <button onclick="lgSubmit()" class="bg-purple-600 hover:bg-purple-700 text-white font-bold px-6 py-3 rounded-xl shadow-lg shadow-purple-200">🤖 AI 批改（LRG）</button>
+    <div class="text-lg font-medium text-slate-800 mb-3" id="lgSource"></div>
+    <!-- 句型任务提示 -->
+    <div id="lgTaskBox" class="bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-100 rounded-xl p-4 mb-4">
+      <div class="flex items-start gap-2">
+        <span class="text-lg">📝</span>
+        <div class="flex-1">
+          <div class="text-sm font-bold text-purple-700 mb-1">句型任务</div>
+          <div id="lgTaskHint" class="text-sm text-slate-700 leading-relaxed"></div>
+        </div>
+      </div>
+    </div>
+    <textarea id="lgInput" rows="4" class="w-full border-2 border-purple-200 focus:border-purple-500 rounded-xl p-4 text-base leading-7 focus:outline-none" placeholder="根据上面的句型任务，写下你的改写句子..."></textarea>
+    <div class="flex gap-3 mt-4 flex-wrap">
+      <button onclick="lgSubmit()" class="bg-purple-600 hover:bg-purple-700 text-white font-bold px-6 py-3 rounded-xl shadow-lg shadow-purple-200 transition-all">✅ 提交并查看解析</button>
       <button onclick="lgPrev()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-3 rounded-xl text-sm font-semibold">← 上一题</button>
       <button onclick="lgNext()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-3 rounded-xl text-sm font-semibold">下一题 →</button>
     </div>
   </div>
-  <div id="lgLoading" class="hidden text-sm text-slate-500 mb-3">AI 正在批改词汇和语法…</div>
-  <div id="lgResult"></div>
+  <!-- 解析区域（提交后立即显示） -->
+  <div id="lgAnalysis" class="hidden mb-4">
+    <div class="bg-white rounded-2xl shadow-lg border border-emerald-100 overflow-hidden">
+      <div class="bg-emerald-50 px-5 py-3 border-b border-emerald-100">
+        <span class="font-bold text-emerald-700">📖 参考答案与解析</span>
+      </div>
+      <div class="p-5 space-y-4">
+        <div>
+          <div class="text-xs font-semibold text-emerald-600 mb-1.5">✅ 参考改写</div>
+          <div id="lgAnswer" class="text-base text-slate-800 bg-emerald-50 rounded-lg p-3 leading-relaxed"></div>
+        </div>
+        <div>
+          <div class="text-xs font-semibold text-purple-600 mb-1.5">💡 句型讲解</div>
+          <div id="lgGrammarExplain" class="text-sm text-slate-700 bg-purple-50 rounded-lg p-3 leading-relaxed"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- AI批改区域（异步显示） -->
+  <div id="lgAISection" class="hidden mb-4">
+    <div class="bg-white rounded-2xl shadow-lg border border-blue-100 overflow-hidden">
+      <div class="bg-blue-50 px-5 py-3 border-b border-blue-100 flex items-center justify-between">
+        <span class="font-bold text-blue-700">🤖 AI 语法批改</span>
+        <span id="lgAIBadge" class="text-xs text-blue-500"></span>
+      </div>
+      <div class="p-5">
+        <div id="lgAILoading" class="hidden text-sm text-slate-500 flex items-center gap-2">
+          <span class="inline-block w-4 h-4 border-2 border-blue-300 border-t-blue-600 rounded-full animate-spin"></span>
+          AI正在检查你的语法错误...
+        </div>
+        <div id="lgAIResult"></div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- ============ 整篇精批 · 选题页 ============ -->
@@ -783,7 +824,8 @@ var TOPIC_NAMES = {
   "education": "教育", "technology": "科技与数字", "environment": "环境与能源",
   "health": "医疗与健康", "government": "政府与政策", "economy": "经济与就业",
   "society": "社会民生", "globalization": "全球化与文化", "urban": "城市化与基建",
-  "philosophy": "抽象哲思"
+  "philosophy": "抽象哲思", "media": "媒体与广告", "crime": "犯罪与法律",
+  "women": "女性与性别", "art": "艺术与文化", "work": "工作与职业"
 };
 var TOPIC_ORDER = ["education","technology","environment","health","government","economy","society","globalization","urban","philosophy"];
 var CAT_NAMES = { "social": "社会民生", "abstract": "抽象类" };
@@ -1216,12 +1258,12 @@ function renderEssayList(){
   var h="",shown=0;
   ESSAY_BANK.forEach(function(q,i){
     if(tf&&q.type!==tf) return;
-    if(cf&&q.cat!==cf) return;
+    if(cf&&(ESSAY_CAT_TO_TP[q.cat]||q.cat)!==cf) return;
     if(kw&&(q.en.toLowerCase().indexOf(kw)<0&&q.zh.indexOf(kw)<0)) return;
     shown++;
     h+="<button onclick='openEssayWork("+i+")' class='w-full text-left bg-white hover:bg-indigo-50 border border-slate-200 hover:border-indigo-300 rounded-xl p-4 transition-all'>"
       +"<div class='flex items-center gap-2 mb-1.5 flex-wrap'><span class='text-[11px] font-bold px-2 py-0.5 rounded "+ESSAY_TYPE_COLOR[q.type]+"'>"+ESSAY_TYPE_NAME[q.type]+"</span>"
-      +"<span class='text-[11px] font-bold px-2 py-0.5 rounded bg-teal-100 text-teal-700'>"+(TP_CAT_NAME[q.cat]||q.cat)+"</span>"
+      +"<span class='text-[11px] font-bold px-2 py-0.5 rounded bg-teal-100 text-teal-700'>"+(TP_CAT_NAME[ESSAY_CAT_TO_TP[q.cat]||q.cat]||q.cat)+"</span>"
       +"<span class='text-xs text-slate-400'>第 "+(i+1)+" 题</span></div>"
       +"<div class='text-sm text-slate-800 leading-6'>"+q.en+"</div>"
       +"<div class='text-xs text-slate-500 mt-1 leading-5'>"+q.zh+"</div></button>";
@@ -4312,39 +4354,123 @@ function lgBuildCats(){
   }).join("");
 }
 function lgRender(){
-  var list=lgFiltered();
-  if(list.length===0){document.getElementById("lgSource").textContent="该话题暂无题目";return;}
-  if(lg.idx>=list.length) lg.idx=0;
-  var it=list[lg.idx];
-  document.getElementById("lgTotal").textContent=list.length;
-  document.getElementById("lgIdx").textContent=lg.idx+1;
-  document.getElementById("lgTopicTag").textContent=TP_CAT_NAME[it.topic]+" · 简单句改写";
-  document.getElementById("lgSource").textContent=it.src;
-  document.getElementById("lgHint").innerHTML=(it.hint||"").replace(/\n/g,"<br>");
-  document.getElementById("lgInput").value="";
-  document.getElementById("lgResult").innerHTML="";
+  try{
+    var list=lgFiltered();
+    if(list.length===0){document.getElementById("lgSource").textContent="该话题暂无题目";return;}
+    if(lg.idx>=list.length) lg.idx=0;
+    var it=list[lg.idx];
+    document.getElementById("lgTotal").textContent=list.length;
+    document.getElementById("lgIdx").textContent=lg.idx+1;
+    document.getElementById("lgTopicTag").textContent=TP_CAT_NAME[it.topic]+" · 简单句改写";
+    document.getElementById("lgSource").textContent=it.src;
+    // 格式化句型任务提示
+    var hint=it.hint||"";
+    var lines=hint.split("\n");
+    var taskHtml="";
+    var grammarType="";
+    var rewriteDir="";
+    lines.forEach(function(line){
+      if(line.indexOf("💡")>=0){
+        grammarType=line.replace("💡","").trim();
+        taskHtml+="<div class='mb-1'><span class='inline-block bg-purple-200 text-purple-800 text-xs px-2 py-0.5 rounded-full font-medium mr-2'>"+grammarType+"</span></div>";
+      }else if(line.indexOf("🔄")>=0){
+        rewriteDir=line.replace("🔄","").trim();
+        taskHtml+="<div class='text-xs text-slate-500 mt-1'>改写方向：<span class='text-slate-700'>"+rewriteDir+"</span></div>";
+      }else{
+        taskHtml+="<div class='text-sm text-slate-600 mt-1'>"+line+"</div>";
+      }
+    });
+    if(grammarType){
+      taskHtml+="<div class='text-xs text-purple-600 mt-2 font-medium'>👉 请用「"+grammarType+"」的句型改写上面这个句子</div>";
+    }
+    document.getElementById("lgTaskHint").innerHTML=taskHtml||"<span class='text-slate-400'>请用更高级的词汇和句型改写这个句子</span>";
+    // 重置输入和结果
+    document.getElementById("lgInput").value="";
+    document.getElementById("lgAnalysis").classList.add("hidden");
+    document.getElementById("lgAISection").classList.add("hidden");
+    document.getElementById("lgAIResult").innerHTML="";
+  }catch(e){
+    console.error("lgRender错误:", e);
+    alert("页面渲染出错，请刷新重试");
+  }
 }
 function lgPrev(){ if(lg.idx>0){lg.idx--;lgRender();} }
 function lgNext(){ var list=lgFiltered(); if(lg.idx<list.length-1){lg.idx++;lgRender();} }
 function lgSubmit(){
-  var userText=document.getElementById("lgInput").value.trim();
-  if(!userText){alert("请先写下你的翻译/改写");return;}
-  var authToken=getAuthToken();
-  if(!authToken){alert("请先登录");openAuth("login");return;}
-  var list=lgFiltered(); var it=list[lg.idx];
-  document.getElementById("lgLoading").classList.remove("hidden");
-  document.getElementById("lgResult").innerHTML="";
+  try{
+    var userText=document.getElementById("lgInput").value.trim();
+    if(!userText){alert("请先根据句型任务写下你的改写句子");return;}
+    var authToken=getAuthToken();
+    if(!authToken){alert("请先登录");openAuth("login");return;}
+    var list=lgFiltered();
+    var it=list[lg.idx];
+    if(!it){alert("题目加载失败，请刷新重试");return;}
+    
+    // ===== 第一步：立即显示解析 =====
+    lgShowAnalysis(it);
+    
+    // ===== 第二步：异步AI批改 =====
+    lgAIReview(it, userText, authToken);
+    
+    // 标记完成
+    if(typeof recordStudy==="function") recordStudy("lg");
+  }catch(e){
+    console.error("lgSubmit错误:", e);
+    alert("提交出错："+e.message+"\n请刷新页面重试");
+  }
+}
+
+// 立即显示解析（参考答案+句型讲解）
+function lgShowAnalysis(it){
+  document.getElementById("lgAnswer").textContent=it.ans||"（暂无参考答案）";
+  // 句型讲解
+  var hint=it.hint||"";
+  var lines=hint.split("\n");
+  var explain="";
+  lines.forEach(function(line){
+    if(line.indexOf("💡")>=0){
+      var gt=line.replace("💡","").trim();
+      explain+="<div class='mb-2'><span class='inline-block bg-purple-200 text-purple-800 text-xs px-2 py-0.5 rounded-full font-medium'>"+gt+"</span></div>";
+      explain+="<div class='text-sm text-slate-600 mb-1'>本句使用了<b class='text-purple-700'>"+gt+"</b>句型，将简单句升级为更复杂的语法结构，提升语法多样性得分。</div>";
+    }else if(line.indexOf("🔄")>=0){
+      var rd=line.replace("🔄","").trim();
+      explain+="<div class='text-sm text-slate-600 mt-2'><span class='text-emerald-600 font-medium'>词汇升级：</span>"+rd+"</div>";
+    }
+  });
+  if(!explain) explain="<span class='text-slate-400'>暂无详细句型讲解</span>";
+  document.getElementById("lgGrammarExplain").innerHTML=explain;
+  // 显示解析区域
+  document.getElementById("lgAnalysis").classList.remove("hidden");
+  // 滚动到解析区域
+  setTimeout(function(){
+    document.getElementById("lgAnalysis").scrollIntoView({behavior:"smooth",block:"nearest"});
+  },100);
+}
+
+// 异步AI批改语法错误
+function lgAIReview(it, userText, authToken){
+  document.getElementById("lgAISection").classList.remove("hidden");
+  document.getElementById("lgAILoading").classList.remove("hidden");
+  document.getElementById("lgAIResult").innerHTML="";
+  document.getElementById("lgAIBadge").textContent="批改中...";
+  
   fetch(WORKER_URL.replace(/\/+$/,"")+"/api/lg",{
-    method:"POST",headers:{"Content-Type":"application/json"},
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
     body:JSON.stringify({token:authToken,type:"rewrite",source:it.src,answer:it.ans,userText:userText})
   }).then(function(r){return r.json();}).then(function(d){
-    document.getElementById("lgLoading").classList.add("hidden");
-    if(!d.ok){document.getElementById("lgResult").innerHTML="<div class='bg-red-50 text-red-700 p-4 rounded-xl'>"+(d.msg||"批改失败")+"</div>";return;}
-    document.getElementById("lgResult").innerHTML=essayMdForDoc(d.result);
-    recordStudy("lg");
+    document.getElementById("lgAILoading").classList.add("hidden");
+    if(!d.ok){
+      document.getElementById("lgAIBadge").textContent="批改失败";
+      document.getElementById("lgAIResult").innerHTML="<div class='bg-red-50 text-red-700 p-4 rounded-xl text-sm'>"+(d.msg||"批改失败，请稍后重试")+"</div>";
+      return;
+    }
+    document.getElementById("lgAIBadge").textContent="批改完成";
+    document.getElementById("lgAIResult").innerHTML=essayMdForDoc(d.result);
   }).catch(function(){
-    document.getElementById("lgLoading").classList.add("hidden");
-    document.getElementById("lgResult").innerHTML="<div class='bg-red-50 text-red-700 p-4 rounded-xl'>网络错误，请重试</div>";
+    document.getElementById("lgAILoading").classList.add("hidden");
+    document.getElementById("lgAIBadge").textContent="网络错误";
+    document.getElementById("lgAIResult").innerHTML="<div class='bg-red-50 text-red-700 p-4 rounded-xl text-sm'>网络错误，请检查网络后重试</div>";
   });
 }
 
