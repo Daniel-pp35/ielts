@@ -306,7 +306,7 @@
           <span class="inline-block w-4 h-4 border-2 border-blue-300 border-t-blue-600 rounded-full animate-spin"></span>
           AI正在检查你的语法错误...
         </div>
-        <div id="lgAIResult"></div>
+        <div class="mt-3 text-center"><button id="lgAddWrongBtn" onclick="lgAddToWrong()" class="hidden text-xs bg-rose-50 text-rose-600 border border-rose-200 px-4 py-2 rounded-lg hover:bg-rose-100 font-medium">＋ 添加到错题本</button></div><div id="lgAIResult"></div>
       </div>
     </div>
   </div>
@@ -655,7 +655,7 @@
   <div class="flex gap-2 mb-4 flex-wrap text-xs">
     <span class="text-slate-400 self-center">按模块：</span>
     <button data-wm="all" onclick="setWrongMod('all')" class="wm-btn px-3 py-1 rounded-full border border-slate-300">全部</button>
-    <button data-wm="cnen" onclick="setWrongMod('cnen')" class="wm-btn px-3 py-1 rounded-full border border-slate-300">中译英</button>
+    <button data-wm="cnen" onclick="setWrongMod('cnen')" class="wm-btn px-3 py-1 rounded-full border border-slate-300">中译英</button>     <button data-wm="lg" onclick="setWrongMod('lg')" class="wm-btn px-3 py-1 rounded-full border border-slate-300">L&G专项</button>
     <button data-wm="cctr" onclick="setWrongMod('cctr')" class="wm-btn px-3 py-1 rounded-full border border-slate-300">TR/CC</button>
     <button data-wm="lg" onclick="setWrongMod('lg')" class="wm-btn px-3 py-1 rounded-full border border-slate-300">LG改写</button>
     <button data-wm="essay" onclick="setWrongMod('essay')" class="wm-btn px-3 py-1 rounded-full border border-slate-300">整篇精批</button>
@@ -122355,6 +122355,7 @@ function recordStudy(mod) { // mod: sentence/cctr/essay/review/lg
   studyStat.total[mod]=(studyStat.total[mod]||0)+1;
   saveStudyStat();
 }
+loadLgSave();
 loadWrong(); loadStudyTime(); loadStudyStat(); updateWrongBadge();
 
 function escHtml(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
@@ -126606,8 +126607,10 @@ function lgRender(){
     alert("页面渲染出错，请刷新重试");
   }
 }
-function lgPrev(){ if(lg.idx>0){lg.idx--;lgRender();} }
-function lgNext(){ var list=lgFiltered(); if(lg.idx<list.length-1){lg.idx++;lgRender();} }
+function lgPrev(){ if(lg.idx>0){lg.idx--;lgRender();}   lgRestoreSave();
+  }
+function lgNext(){ var list=lgFiltered(); if(lg.idx<list.length-1){lg.idx++;lgRender();}   lgRestoreSave();
+  }
 function lgSubmit(){
   try{
     var userText=document.getElementById("lgInput").value.trim();
@@ -126622,7 +126625,8 @@ function lgSubmit(){
     lgShowAnalysis(it);
     
     // ===== 第二步：异步AI批改 =====
-    lgAIReview(it, userText, authToken);
+      lgSaveCurrent();
+  lgAIReview(it, userText, authToken);
     
     // 标记完成
     if(typeof recordStudy==="function") recordStudy("lg");
@@ -126858,6 +126862,79 @@ function lgAIReview(it, userText, authToken){
     document.getElementById("lgAIResult").innerHTML="<div class='bg-red-50 text-red-700 p-4 rounded-xl text-sm'><b>网络错误：</b>"+(err&&err.message?err.message:"无法连接到AI服务，请检查网络后重试。")+"<br><br>如果多次出现此错误，请确认后端已部署最新版本的worker.js。</div>";
   });
 }
+// LG本地保存
+var LG_SAVE_KEY = "ielts_lg_save_v1";
+var lgSaveData = {};
+function loadLgSave(){ try{ var r=localStorage.getItem(LG_SAVE_KEY); lgSaveData=r?JSON.parse(r):{}; }catch(e){ lgSaveData={}; } }
+function saveLgSave(){ try{ localStorage.setItem(LG_SAVE_KEY, JSON.stringify(lgSaveData)); }catch(e){} }
+function lgItemKey(it){ return "lg_"+it.topic+"_"+(it.num||it.src.substring(0,20)); }
+
+// LG添加到错题本
+function lgAddToWrong(){
+  var it=lgFiltered()[lg.idx];
+  var k=lgItemKey(it);
+  var userText=document.getElementById("lgInput").value.trim();
+  var aiResult=document.getElementById("lgAIResult").innerText||"";
+  if(wrongBook[k]){
+    delete wrongBook[k];
+    document.getElementById("lgAddWrongBtn").textContent="＋ 添加到错题本";
+    document.getElementById("lgAddWrongBtn").classList.remove("bg-rose-600","text-white");
+    document.getElementById("lgAddWrongBtn").classList.add("bg-rose-50","text-rose-600");
+  } else {
+    wrongBook[k]={
+      key:k, cat:"lg", topic:it.topic, num:it.num||0,
+      ch:it.src, en:it.ans, userText:userText,
+      errorTypes:["L&G专项"], aiAnalysis:aiResult, howToFix:"",
+      grammar:it.hint||"", addedAt:Date.now(), lastWrongAt:Date.now(), repracticed:false
+    };
+    document.getElementById("lgAddWrongBtn").textContent="✓ 已在错题本（点此移出）";
+    document.getElementById("lgAddWrongBtn").classList.add("bg-rose-600","text-white");
+    document.getElementById("lgAddWrongBtn").classList.remove("bg-rose-50","text-rose-600");
+  }
+  saveWrong();
+  updateWrongBadge();
+}
+
+// LG恢复保存的答案和批改结果
+function lgRestoreSave(){
+  var it=lgFiltered()[lg.idx];
+  var k=lgItemKey(it);
+  var saved=lgSaveData[k];
+  if(saved){
+    if(saved.userText) document.getElementById("lgInput").value=saved.userText;
+    if(saved.aiResult){
+      document.getElementById("lgAISection").classList.remove("hidden");
+      document.getElementById("lgAILoading").classList.add("hidden");
+      document.getElementById("lgAIBadge").textContent="批改完成";
+      document.getElementById("lgAIResult").innerHTML=essayMdForDoc(saved.aiResult);
+    }
+    // 更新添加到错题本按钮状态
+    var btn=document.getElementById("lgAddWrongBtn");
+    if(btn){
+      btn.classList.remove("hidden");
+      if(wrongBook[k]){
+        btn.textContent="✓ 已在错题本（点此移出）";
+        btn.classList.add("bg-rose-600","text-white");
+        btn.classList.remove("bg-rose-50","text-rose-600");
+      } else {
+        btn.textContent="＋ 添加到错题本";
+        btn.classList.remove("bg-rose-600","text-white");
+        btn.classList.add("bg-rose-50","text-rose-600");
+      }
+    }
+  }
+}
+
+// LG保存当前答案
+function lgSaveCurrent(){
+  var it=lgFiltered()[lg.idx];
+  var k=lgItemKey(it);
+  var userText=document.getElementById("lgInput").value.trim();
+  if(!lgSaveData[k]) lgSaveData[k]={};
+  lgSaveData[k].userText=userText;
+  saveLgSave();
+}
+
 
 // ===== 个人学习报告 =====
 function enterReport(){
