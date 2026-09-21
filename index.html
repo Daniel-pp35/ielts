@@ -104,9 +104,7 @@
     <button onclick="enterReport()" class="bg-cyan-600 hover:bg-cyan-700 text-white text-sm font-semibold px-4 py-4 rounded-xl shadow-lg shadow-cyan-200 transition-all hover:scale-105">
       学习报告
     </button>
-    <button onclick="openFav()" class="bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold px-4 py-4 rounded-xl shadow-lg shadow-orange-200 transition-all hover:scale-105">
-      📚 单词/短语本
-    </button>
+    
   </div>
   <!-- 试用三天卡密领取（已删除，改用账号注册自动试用） -->
   <div class="hidden mt-5 w-full max-w-md bg-purple-50 border border-purple-200 rounded-xl p-4 text-left">
@@ -285,9 +283,9 @@
         </div>
       </div>
     </div>
-    <textarea id="lgInput" rows="4" class="w-full border-2 border-purple-200 focus:border-purple-500 rounded-xl p-4 text-base leading-7 focus:outline-none" placeholder="根据上面的句型任务，写下你的改写句子..."></textarea>
+    <textarea id="lgInput" rows="4" class="w-full border-2 border-purple-200 focus:border-purple-500 rounded-xl p-4 text-base leading-7 focus:outline-none" placeholder="根据上面的句型任务，写下你的改写句子..."></textarea><div class="flex justify-end mt-2"><button onclick="document.getElementById('lgInput').value='';lgSaveCurrent();" class="text-xs text-slate-400 hover:text-slate-600">🗑 清除作答</button></div>
     <div class="flex gap-3 mt-4 flex-wrap">
-      <button onclick="lgSubmit()" class="bg-purple-600 hover:bg-purple-700 text-white font-bold px-6 py-3 rounded-xl shadow-lg shadow-purple-200 transition-all">✅ 提交并查看解析</button>
+      <button onclick="lgSubmit()" class="bg-purple-600 hover:bg-purple-700 text-white font-bold px-6 py-3 rounded-xl shadow-lg shadow-purple-200 transition-all">✅ 提交并查看解析</button> <button id="lgWrongBtn" onclick="lgToggleWrong()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 px-4 py-3 rounded-xl text-sm font-semibold border border-rose-200">＋ 加入错题本</button>
       <button onclick="lgPrev()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-3 rounded-xl text-sm font-semibold">← 上一题</button>
       <button onclick="lgNext()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-3 rounded-xl text-sm font-semibold">下一题 →</button>
     </div>
@@ -503,7 +501,7 @@
     <button onclick="backFromTrain()" class="text-slate-500 hover:text-slate-800 text-sm flex items-center gap-1">← 首页</button>
     <h2 class="font-semibold text-slate-800">中译英练习</h2>
     <div class="flex items-center gap-3">
-      <button onclick="openFav()" class="text-slate-500 hover:text-orange-500 text-sm flex items-center gap-1" title="单词收藏夹">📚 单词本 <span id="favCount" class="bg-orange-100 text-orange-600 text-xs px-1.5 rounded-full">0</span></button>
+      
       <button id="authBtn" onclick="openAuth('login')" class="text-slate-500 hover:text-purple-600 text-sm flex items-center gap-1">🔑 登录/注册</button>
       <button onclick="openCardModal()" class="text-slate-500 hover:text-purple-600 text-sm flex items-center gap-1" title="卡密激活">🎫 <span id="cardBtnText">卡密激活</span></button>
     </div>
@@ -553,13 +551,13 @@
         <div class="text-xs text-slate-400 mt-1">💡 快捷键：Ctrl+Enter 提交解析 · 提交后按 空格 跳到下一题</div>
 
     <div class="flex flex-wrap gap-2 mt-3">
-      <button onclick="submitAnswer()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg text-sm font-medium">提交并显示解析</button>
+      <button onclick="submitAnswer()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg text-sm font-medium">提交并显示解析</button> <button id="manualWrongBtn" onclick="manualToggleWrong()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 px-4 py-2 rounded-lg text-sm font-semibold border border-rose-200">＋ 加入错题本</button>
       <button onclick="aiPolishOnly()" class="bg-purple-50 hover:bg-purple-100 text-purple-700 px-4 py-2 rounded-lg text-sm">🤖 AI润色</button>
       <button id="btnShowAns" onclick="showAnswerOnly()" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 px-4 py-2 rounded-lg text-sm">显示解析</button>
       <button id="btnHideAns" onclick="hideAnalysis()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 px-4 py-2 rounded-lg text-sm disabled:opacity-40 disabled:cursor-not-allowed" disabled>隐藏解析</button>
       <button onclick="prevItem()" class="nav-btn bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-lg text-sm disabled:opacity-40 disabled:cursor-not-allowed">← 上一题</button>
       <button onclick="nextItem()" class="nav-btn bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-lg text-sm disabled:opacity-40 disabled:cursor-not-allowed">下一题 →</button>
-      <button onclick="openWrongFromTrain()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 px-4 py-2 rounded-lg text-sm">📒 错题本</button>
+      
     </div>
   </div>
 
@@ -575,7 +573,7 @@
       <div class="acc-body hidden px-4 pb-4">
         <div id="aiLoading" class="text-sm text-slate-400 py-2 hidden">AI 批改中，请稍候……</div>
         <div id="aiResult" class="text-slate-700 text-sm leading-6"></div>
-        <button id="manualWrongBtn" onclick="manualToggleWrong()" class="mt-3 text-xs bg-rose-50 hover:bg-rose-100 text-rose-600 px-3 py-1.5 rounded-lg">＋ 加入错题本</button>
+        
         <div id="aiEmpty" class="text-sm text-slate-500 py-2">
           <p class="mb-2">💡 先激活卡密，再输入译文点「提交并显示解析」，AI 会自动批改（单复数/词性/时态/搭配等）。</p>
           <button onclick="openCardModal()" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium">🎫 激活卡密</button>
@@ -657,8 +655,8 @@
     <button data-wm="all" onclick="setWrongMod('all')" class="wm-btn px-3 py-1 rounded-full border border-slate-300">全部</button>
     <button data-wm="cnen" onclick="setWrongMod('cnen')" class="wm-btn px-3 py-1 rounded-full border border-slate-300">中译英</button>     <button data-wm="lg" onclick="setWrongMod('lg')" class="wm-btn px-3 py-1 rounded-full border border-slate-300">L&G专项</button>
     <button data-wm="cctr" onclick="setWrongMod('cctr')" class="wm-btn px-3 py-1 rounded-full border border-slate-300">TR/CC</button>
-    <button data-wm="lg" onclick="setWrongMod('lg')" class="wm-btn px-3 py-1 rounded-full border border-slate-300">LG改写</button>
-    <button data-wm="essay" onclick="setWrongMod('essay')" class="wm-btn px-3 py-1 rounded-full border border-slate-300">整篇精批</button>
+    
+    
   </div>
   <div id="wrongList"></div>
 </div>
@@ -712,24 +710,7 @@
   </div>
 </div>
 
-<div id="favModal" class="hidden fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
-  <div class="bg-white rounded-2xl shadow-xl max-w-2xl w-full max-h-[82vh] flex flex-col">
-    <div class="flex items-center justify-between p-5 border-b border-slate-100">
-      <div>
-        <h3 class="font-bold text-lg text-slate-800">📚 单词收藏夹</h3>
-        <p class="text-xs text-slate-400 mt-0.5">点击 ⭐ 收藏单词，集中背记；点 ✓ 标记已掌握</p>
-      </div>
-      <button onclick="closeFav()" class="text-slate-400 hover:text-slate-700 text-2xl leading-none">×</button>
-    </div>
-    <div class="flex items-center gap-4 px-5 py-3 border-b border-slate-100 text-xs text-slate-500 bg-slate-50">
-      <span>共 <b id="favTotal" class="text-orange-600">0</b> 个</span>
-      <span>已掌握 <b id="favMastered" class="text-emerald-600">0</b> 个</span>
-      <span>待背记 <b id="favPending" class="text-blue-600">0</b> 个</span>
-      <button onclick="clearFav()" class="ml-auto text-red-400 hover:text-red-600">清空全部</button>
-    </div>
-    <div id="favList" class="overflow-y-auto p-4 flex-1 space-y-2"></div>
-  </div>
-</div>
+
 
 <!-- ============ TR&CC 专项训练 ============ -->
 <div id="cctrPage" class="hidden max-w-3xl mx-auto px-4 md:px-6 py-6">
@@ -106717,9 +106698,6 @@ function statPush(ev, extra){
 setInterval(function(){ statPush("tick"); },30000); // 每30秒累计活跃时长
 document.addEventListener("visibilitychange",function(){ if(document.visibilityState==="hidden") statPush("leave"); });
 window.addEventListener("pagehide",function(){ statPush("leave"); });
-var FAV_KEY = "ielts_cnen_favorites_v1";
-var favorites = {}; // { word: {word, mean, eg, mastered} }
-
 function todayStr() {
   var d = new Date();
   return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
@@ -121146,7 +121124,7 @@ function renderTplCats(){
 }
 function renderTplList(){
   var kw=(document.getElementById("tplSearch").value||"").toLowerCase();
-  var html="";
+  var h="";
   Object.keys(_tplData).forEach(function(cat){
     if(_tplCurCat!=="all"&&_tplCurCat!==cat)return;
     var list=_tplData[cat].list.filter(function(t){
@@ -121154,17 +121132,17 @@ function renderTplList(){
       return t.t.toLowerCase().indexOf(kw)>=0||t.eg.toLowerCase().indexOf(kw)>=0||t.use.indexOf(kw)>=0||_tplData[cat].name.indexOf(kw)>=0;
     });
     if(list.length===0)return;
-    html+="<div class='mb-4'><div class='text-xs font-bold text-indigo-600 mb-2'>"+_tplData[cat].name+"（"+list.length+"）</div><div class='space-y-2'>";
+    h+="<div class='mb-4'><div class='text-xs font-bold text-indigo-600 mb-2'>"+_tplData[cat].name+"（"+list.length+"）</div><div class='space-y-2'>";
     list.forEach(function(t){
-      html+="<div class='bg-slate-50 rounded-lg p-3 border border-slate-100'>"
+      h+="<div class='bg-slate-50 rounded-lg p-3 border border-slate-100'>"
         +"<p class='text-sm font-semibold text-slate-800 mb-1'>"+t.t+"</p>"
         +"<p class='text-xs text-emerald-700 mb-1'>💡 "+t.eg+"</p>"
         +"<p class='text-[11px] text-slate-500'>📌 "+t.use+"</p></div>";
     });
-    html+="</div></div>";
+    h+="</div></div>";
   });
-  if(!html)html="<p class='text-center text-slate-400 text-sm py-8'>没有找到匹配的句型</p>";
-  document.getElementById("tplList").innerHTML=html;
+  if(!h)h="<p class='text-center text-slate-400 text-sm py-8'>没有找到匹配的句型</p>";
+  document.getElementById("tplList").innerHTML=h;
 }
 function synoSearch(){
   var w=(document.getElementById("synoInput").value||"").trim();
@@ -121335,71 +121313,87 @@ function essaySubmit(){
 // 专为 Word/WPS 生成的卡片排版：全部内联样式（Word 不认 class/Tailwind/flex/圆角）
 function essayMdForDoc(t){
   var esc=function(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");};
-  t=String(t).split(String.fromCharCode(13)).join("");
-  var inline=function(s){return esc(s).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>");};
+  t=String(t).replace(/\r/g,"");
+  var inline=function(s){
+      return esc(s)
+        .replace(/\*\*(.+?)\*\*/g,"<b>$1</b>")
+        .replace(/((?:问题|错误|建议|原因|改进|注意|要点|缺点|优点)\s*[\d一二三四五六七八九十]+[、.．:：]?)/g,"<b style='color:#b45309;font-size:11px'>$1</b>")
+        .replace(/(^|[\n])(\d+[、.．)）])/g,"$1<b style='color:#b45309'>$2</b>");
+    };;
   var hasZh=function(s){return /[\u4e00-\u9fa5]/.test(s);};
   
+  // 样式常量
+  var SNT_STYLE = "background:#fbfdff;border:1px solid #e6edf5;border-radius:10px;padding:8px 10px;margin:8px 0;";
+  var ORIG_STYLE = "background:#eff6ff;border-left:3px solid #3b82f6;border-radius:6px;padding:6px 9px;color:#1e3a5f;font-size:10.5px;line-height:1.7;";
+  var FIX_STYLE = "background:#ecfdf5;border-left:3px solid #10b981;border-radius:6px;padding:6px 9px;color:#065f46;font-size:10.5px;line-height:1.7;margin-top:6px;";
+  var NOTE_STYLE = "background:#fffbeb;border-left:3px solid #f59e0b;border-radius:6px;padding:6px 9px;color:#7c4a12;font-size:10px;line-height:1.7;margin-top:6px;";
+  var ZH_STYLE = "color:#64748b;font-size:10px;line-height:1.7;margin-top:5px;";
+  var TAG_O_STYLE = "display:inline-block;font-size:9px;font-weight:700;padding:1px 6px;border-radius:99px;margin-right:5px;background:#3b82f6;color:#fff;";
+  var TAG_F_STYLE = "display:inline-block;font-size:9px;font-weight:700;padding:1px 6px;border-radius:99px;margin-right:5px;background:#10b981;color:#fff;";
+  var TAG_N_STYLE = "display:inline-block;font-size:9px;font-weight:700;padding:1px 6px;border-radius:99px;margin-right:5px;background:#f59e0b;color:#fff;";
+  var LI_STYLE = "margin:3px 0;color:#475569;font-size:10.5px;line-height:1.7;";
+  var P_STYLE = "margin:4px 0;color:#334155;font-size:10.5px;line-height:1.7;";
+  
   var block=function(body){
-    var lines=body.split("\n"),h="",cur=null,buf=[],quoteText="",fixText="",noteText="";
+    var lines=body.split("\n"),h="",cur=null,buf=[],inList=false,sntOpen=false;
     var flush=function(){
       if(cur){
-        if(cur==="quote") quoteText=buf.join(" ");
-        else if(cur==="fix") fixText=buf.join(" ");
-        else if(cur==="note") noteText=buf.join(" ");
-        else {
-          h+="<div style='color:#334155;margin:4px 0'>"+buf.join("<br>")+"</div>";
-        }
+        if(cur==="quote") h+="<div style='"+ORIG_STYLE+"'><span style='"+TAG_O_STYLE+"'>原句</span>"+buf.join("<br>")+"</div>";
+        else if(cur==="fix") h+="<div style='"+FIX_STYLE+"'><span style='"+TAG_F_STYLE+"'>修改</span>"+buf.join("<br>")+"</div>";
+        else if(cur==="note") h+="<div style='"+NOTE_STYLE+"'><span style='"+TAG_N_STYLE+"'>讲解</span>"+buf.join("<br>")+"</div>";
+        else h+="<div style='"+ZH_STYLE+"'>"+buf.join("<br>")+"</div>";
         cur=null;buf=[];
       }
-      if(quoteText || fixText || noteText){
-        h+="<div style='margin:6px 0;padding:6px 0;border-bottom:1px dotted #e2e8f0'>";
-        if(quoteText){
-          h+="<span style='color:#dc2626;text-decoration:line-through'>"+inline(quoteText)+"</span>";
-          h+="<span style='color:#6b7280'> ✏️ </span>";
-        }
-        if(noteText || fixText){
-          var comment="";
-          if(noteText) comment+=inline(noteText);
-          if(fixText){
-            if(comment) comment+="<br>";
-            comment+="可以改成：<span style='color:#1d4ed8;font-weight:bold'>"+inline(fixText)+"</span>";
-          }
-          h+="<span style='color:#2563eb;font-size:11.5px'>（"+comment+"）</span>";
-        }
-        h+="</div>";
-        quoteText="";fixText="";noteText="";
-      }
     };
+    var openSnt=function(){if(!sntOpen){h+="<div style='"+SNT_STYLE+"'>";sntOpen=true;}};
+    var closeSnt=function(){flush();if(sntOpen){h+="</div>";sntOpen=false;}};
+    var closeList=function(){if(inList){h+="</ul>";inList=false;}};
     lines.forEach(function(ln){
-      var L=ln.trim();if(!L)return;
+      var L=ln.trim();
+      if(!L){return;}
       var isQ=/^原句[:：]\s?/.test(L),isF=/^(改成|修改后|改为|正确)[:：]?\s?/.test(L),isZ=/^中文[:：]\s?/.test(L);
       var m=L.match(/^[-•·]\s+(.*)$/),num=L.match(/^\d+[.、)]\s+(.*)$/);
-      if(isQ){flush();cur="quote";buf=[inline(L.replace(/^原句[:：]\s?/,""))];return;}
+      if(isQ){closeSnt();closeList();openSnt();cur="quote";buf=[inline(L.replace(/^原句[:：]\s?/,""))];return;}
       if(isF){flush();cur="fix";buf=[inline(L.replace(/^(改成|修改后|改为|正确)[:：]?\s?/,""))];return;}
       if(isZ){flush();cur="zh";buf=[inline(L.replace(/^中文[:：]\s?/,""))];return;}
-      if(m||num){flush();h+="<div style='margin:4px 0 4px 20px;color:#475569'>• "+inline(m?m[1]:num[1])+"</div>";return;}
-      if(cur==="quote"||cur==="fix"){if(hasZh(L)){flush();cur="note";buf=[inline(L)];}else buf.push(inline(L));return;}
+      if(m||num){closeSnt();
+        var tag=m?m[1]:num[1];
+        if(!inList){h+="<ul style='margin:6px 0;padding-left:22px;line-height:1.7'>";inList=true;}
+        h+="<li style='"+LI_STYLE+"'>"+inline(tag)+"</li>";return;}
+      if(cur==="quote"||cur==="fix"){
+        if(hasZh(L)){flush();cur="note";buf=[inline(L)];} else buf.push(inline(L));
+        return;
+      }
       if(cur){buf.push(inline(L));return;}
-      h+="<div style='color:#334155;margin:4px 0'>"+inline(L)+"</div>";
+      closeSnt();closeList();
+      h+="<p style='"+P_STYLE+"'>"+inline(L)+"</p>";
     });
-    flush();return h;
+    closeSnt();closeList();
+    return h;
+  };
+  
+  // 分类颜色（与页面版一致）
+  var cardColor=function(title){
+    var t=title||"";
+    if(/评分/.test(t)) return {bar:"#f59e0b",ic:"📊"};
+    if(/逐句/.test(t)) return {bar:"#4f46e5",ic:"🔍"};
+    if(/修改后完整/.test(t)) return {bar:"#334155",ic:"📝"};
+    if(/TR/.test(t)) return {bar:"#2563eb",ic:"🎯"};
+    if(/CC/.test(t)) return {bar:"#0891b2",ic:"🔗"};
+    if(/建议/.test(t)) return {bar:"#0d9488",ic:"⚡"};
+    if(/范文/.test(t)) return {bar:"#7c3aed",ic:"✍️"};
+    if(/表达|替换|词汇/.test(t)) return {bar:"#e11d48",ic:"⭐"};
+    return {bar:"#475569",ic:"📌"};
   };
   
   var parts=t.split(/【([^】]+)】/),out="";
-  if(parts[0].trim())out+="<div style='margin-bottom:10px'>"+block(parts[0])+"</div>";
+  if(parts[0].trim()) out+="<div style='color:#64748b;font-size:10px;margin-bottom:6px;line-height:1.7'>"+block(parts[0])+"</div>";
   for(var i=1;i<parts.length;i+=2){
-    var title=parts[i],body=parts[i+1]||"";
-    // 逐句精批不加底色，其他分类加底色铺满
-    var isZhuju = title.indexOf("逐句")>=0 || title.indexOf("精批")>=0;
-    if(isZhuju){
-      out+="<div style='margin:12px 0 6px 0;font-size:13px;font-weight:bold;color:#1e40af;font-family:SimHei,sans-serif'>"+esc(title)+"</div>";
-      out+="<div style='margin-bottom:10px;line-height:1.7'>"+block(body)+"</div>";
-    } else {
-      out+="<div style='margin:12px 0;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;overflow:hidden'>";
-      out+="<div style='background:#1e40af;color:#fff;font-weight:bold;padding:8px 14px;font-size:13px;font-family:SimHei,sans-serif'>"+esc(title)+"</div>";
-      out+="<div style='padding:12px 16px;line-height:1.7'>"+block(body)+"</div>";
-      out+="</div>";
-    }
+    var title=parts[i],body=parts[i+1]||"",meta=cardColor(title);
+    out+="<div style='margin:6px 0;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;background:#fff'>"
+      +"<div style='background:"+meta.bar+";color:#fff;font-weight:bold;font-size:10.5px;padding:6px 12px;display:flex;align-items:center;gap:5px'>"
+      +"<span>"+meta.ic+"</span><span>"+esc(title)+"</span></div>"
+      +"<div style='padding:10px 14px;line-height:1.7;font-size:10.5px;color:#1e293b'>"+block(body)+"</div></div>";
   }
   return out;
 }
@@ -121409,29 +121403,62 @@ function essayExportWord(){
   var wc=rec?rec.wc:essayWordCount(text);
   var esc=function(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");};
   var dateStr=new Date().toLocaleDateString("zh-CN");
-  var html='<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>复盘报告</title><!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View></w:WordDocument></xml><![endif]--></head><body style="font-family:Times New Roman,SimSun,serif;line-height:1.5;color:#1a202c;margin:0;padding:0">'
-    +'<div style="padding:16px 0 8px;border-bottom:2px solid #2563eb;margin-bottom:10px">'
-    +'<h1 style="font-size:26px;font-family:SimHei,sans-serif;color:#1e40af;margin:0 0 4px 0">IELTS Writing Assessment Report</h1>'
-    +'<p style="font-size:10px;color:#64748b;margin:0">生成日期：'+dateStr+' &nbsp;|&nbsp; 第 '+(essay.idx+1)+' 题 &nbsp;|&nbsp; 原文 '+wc+' 词</p>'
-    +'</div>'
-    +'<div style="margin-bottom:10px">'
-    +'<h2 style="font-size:17px;font-family:SimHei,sans-serif;color:#1e40af;margin:0 0 4px 0;padding-bottom:3px;border-bottom:1px solid #e2e8f0">Task Question</h2>'
-    +'<p style="font-size:12.5px;font-weight:bold;color:#1e293b;margin:0 0 3px 0;line-height:1.5">'+esc(q.en)+'</p>'
-    +'<p style="font-size:11.5px;color:#64748b;margin:0;line-height:1.5">'+esc(q.zh)+'</p>'
-    +'</div>'
-    +'<div style="margin-bottom:10px">'
-    +'<h2 style="font-size:17px;font-family:SimHei,sans-serif;color:#1e40af;margin:0 0 4px 0;padding-bottom:3px;border-bottom:1px solid #e2e8f0">Original Essay（'+wc+' words）</h2>'
-    +'<p style="font-size:12px;color:#334155;margin:0;line-height:1.6;white-space:pre-wrap">'+esc(text)+'</p>'
-    +'</div>'
-    +'<div style="margin-bottom:10px">'
-    +'<h2 style="font-size:17px;font-family:SimHei,sans-serif;color:#1e40af;margin:0 0 4px 0;padding-bottom:3px;border-bottom:1px solid #e2e8f0">Corrected Essay with Comments</h2>'
-    +'<div style="font-size:12px;color:#334155;line-height:1.6">'+essayMdForDoc(result)+'</div>'
-    +'</div>'
-    +'<div style="text-align:center;padding-top:8px;border-top:1px dashed #cbd5e1;margin-top:12px">'
-    +'<p style="font-size:9px;color:#94a3b8;margin:0">本报告由 AI 自动生成 · 仅供学习参考</p>'
-    +'</div>'
-    +'</body></html>';
-  var blob=new Blob([html],{type:"application/msword;charset=utf-8"});
+  
+  // 把原文按段落分割（按照空行或者换行）
+  var paragraphs = text.split(/\n\s*\n/);
+  if(paragraphs.length<=1) paragraphs = text.split(/\n/);
+  var paraHtml = paragraphs.map(function(p){
+    p = p.trim();
+    if(!p) return "";
+    return "<p style='font-size:10.5px;color:#1e293b;margin:0 0 10px 0;line-height:1.8;text-indent:2em'>"+esc(p)+"</p>";
+  }).join("");
+  
+  var doc = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>复盘报告</title><!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View></w:WordDocument></xml><![endif]--></head><body style="font-family:Georgia,\'Times New Roman\',SimSun,serif;line-height:1.7;color:#1e293b;margin:0;padding:0">';
+  
+  // 标题区（柔和的浅蓝色背景）
+  doc += '<div style="background:#eff6ff;padding:24px 28px;margin-bottom:18px;border-bottom:3px solid #bfdbfe">';
+  doc += '<h1 style="font-size:26px;font-family:SimHei,sans-serif;color:#1e40af;margin:0 0 6px 0;letter-spacing:0.5px">IELTS Writing Assessment Report</h1>';
+  doc += '<p style="font-size:9.5px;color:#64748b;margin:0">生成日期：'+dateStr+' &nbsp;|&nbsp; 第 '+(essay.idx+1)+' 题 &nbsp;|&nbsp; 原文 '+wc+' 词</p>';
+  doc += '</div>';
+  
+  // 题目区
+  doc += '<div style="margin-bottom:14px">';
+  doc += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">';
+  doc += '<div style="width:4px;height:18px;background:#3b82f6;border-radius:2px"></div>';
+  doc += '<h2 style="font-size:15px;font-family:SimHei,sans-serif;color:#1e40af;margin:0">Task Question</h2>';
+  doc += '</div>';
+  doc += '<div style="background:#f8fafc;border-left:3px solid #93c5fd;padding:10px 14px;border-radius:0 4px 4px 0">';
+  doc += '<p style="font-size:10.5px;font-weight:bold;color:#1e293b;margin:0 0 3px 0;line-height:1.7">'+esc(q.en)+'</p>';
+  doc += '<p style="font-size:10px;color:#64748b;margin:0;line-height:1.7">'+esc(q.zh)+'</p>';
+  doc += '</div></div>';
+  
+  // 原文区（分段显示）
+  doc += '<div style="margin-bottom:14px">';
+  doc += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">';
+  doc += '<div style="width:4px;height:18px;background:#10b981;border-radius:2px"></div>';
+  doc += '<h2 style="font-size:15px;font-family:SimHei,sans-serif;color:#059669;margin:0">Original Essay（'+wc+' words）</h2>';
+  doc += '</div>';
+  doc += '<div style="background:#fff;border:1px solid #e2e8f0;padding:14px 18px;border-radius:6px">';
+  doc += paraHtml;
+  doc += '</div></div>';
+  
+  // AI精批区
+  doc += '<div style="margin-bottom:14px">';
+  doc += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">';
+  doc += '<div style="width:4px;height:18px;background:#f59e0b;border-radius:2px"></div>';
+  doc += '<h2 style="font-size:15px;font-family:SimHei,sans-serif;color:#d97706;margin:0">Corrected Essay with Comments</h2>';
+  doc += '</div>';
+  doc += '<div style="font-size:10px;color:#1e293b;line-height:1.7">'+essayMdForDoc(result)+'</div>';
+  doc += '</div>';
+  
+  // 页脚
+  doc += '<div style="text-align:center;padding-top:10px;border-top:1px solid #e2e8f0;margin-top:16px">';
+  doc += '<p style="font-size:9px;color:#94a3b8;margin:0">本报告由 AI 自动生成 · 仅供学习参考</p>';
+  doc += '</div>';
+  
+  doc += '</body></html>';
+  
+  var blob=new Blob([doc],{type:"application/msword;charset=utf-8"});
   var url=URL.createObjectURL(blob),a=document.createElement("a");
   a.href=url;a.download="雅思精批复盘_第"+(essay.idx+1)+"题.doc";
   document.body.appendChild(a);a.click();
@@ -122485,7 +122512,7 @@ function fmtDate(ts){
 function renderWrong() {
   updateWrongBadge();
   var arr=Object.keys(wrongBook).map(function(k){ return wrongBook[k]; });
-  arr=arr.filter(function(r){
+  arr=arr.filter(function(r){ if((r.module||"")==="essay") return false; 
     if(wrongFilter==="todo") return !r.repracticed;
     if(wrongFilter==="done") return !!r.repracticed;
     return true;
@@ -124067,7 +124094,7 @@ function cctrBody(uid){
     "<b>本论点提示：</b>"+escHtml(p.h)+"</div>"+
     "<textarea id='pt-input-"+uid+"' rows='5' oninput=\"cctrDraft('"+uid+"')\" class='w-full border border-slate-300 rounded-lg p-2.5 text-sm leading-6' placeholder='就在本论点下面写：原因解释 + 具体例子 + 小结'>"+escHtml(ut)+"</textarea>"+
     "<div class='flex flex-wrap items-center gap-2 mt-2'>"+
-      "<button onclick=\"cctrSubmit('"+uid+"')\" class='px-4 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold'>提交，AI打TR/CC分</button>"+
+      "<button onclick=\"cctrSubmit('"+uid+"')\" class='px-4 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold'>提交，AI打TR/CC分</button><button onclick=\"cctrAddWrong('"+uid+"')\" class='px-4 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 text-sm font-semibold border border-rose-200'>＋ 加入错题本</button>"+
     "</div>"+
     "<div id='pt-review-"+uid+"' class='mt-2'>"+(rt?"<div class='text-sm leading-7 text-slate-700 bg-slate-50 rounded-xl p-3'>"+cctrFmtAI(rt)+"</div>":"")+"</div>";
 }
@@ -124109,6 +124136,29 @@ function cctrSubmit(uid){
     cctrUpsert(p.t,{userText:txt,result:d.result});
   }).catch(function(){ out.innerHTML="<span class='text-rose-500 text-sm'>连接中断，请重试</span>"; });
 }
+function cctrAddWrong(uid){
+  var item = cctrItems[uid];
+  if(!item) return;
+  var k = "cctr_"+uid;
+  var userText = "";
+  var inputEl = document.getElementById("pt-input-"+uid);
+  if(inputEl) userText = inputEl.value;
+  if(wrongBook[k]){
+    delete wrongBook[k];
+    alert("已从错题本移出");
+  } else {
+    wrongBook[k]={
+      key:k, cat:"cctr", topic:item.topic||"TR&CC", num:0,
+      ch:item.question||"", en:item.zh||"", userText:userText,
+      errorTypes:["TR&CC专项"], aiAnalysis:"", howToFix:"",
+      grammar:"", addedAt:Date.now(), lastWrongAt:Date.now(), repracticed:false
+    };
+    alert("已加入错题本（TR&CC专项）");
+  }
+  saveWrong();
+  updateWrongBadge();
+}
+
 function cctrFmtAI(s){
   return String(s)
     .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
@@ -126606,6 +126656,8 @@ function lgRender(){
     console.error("lgRender错误:", e);
     alert("页面渲染出错，请刷新重试");
   }
+  lgRestoreSave();
+    if(typeof lgRefreshWrongBtn==="function") lgRefreshWrongBtn();
 }
 function lgPrev(){ if(lg.idx>0){lg.idx--;lgRender();}   lgRestoreSave();
   }
@@ -126934,6 +126986,47 @@ function lgSaveCurrent(){
   lgSaveData[k].userText=userText;
   saveLgSave();
 }
+// LG错题本功能
+function lgItemKey(it){
+  return "lg_"+it.topic+"_"+it.num;
+}
+function lgToggleWrong(){
+  var list=lgFiltered(), it=list[lg.idx];
+  if(!it) return;
+  var key=lgItemKey(it);
+  if(wrongBook[key]){
+    delete wrongBook[key];
+    alert("已从错题本移出");
+  } else {
+    wrongBook[key]={
+      module:"LG专项",
+      topic:it.topic,
+      num:it.num,
+      src:it.src,
+      ans:it.ans,
+      hint:it.hint,
+      errorTypes:["LG专项"],
+      aiAnalysis:"",
+      howToFix:"",
+      grammar:"",
+      addedAt:Date.now(),
+      lastWrongAt:Date.now(),
+      repracticed:false
+    };
+    alert("已加入错题本（LG专项）");
+  }
+  saveWrong();
+  updateWrongBadge();
+  lgRefreshWrongBtn();
+}
+function lgRefreshWrongBtn(){
+  var list=lgFiltered(), it=list[lg.idx];
+  if(!it) return;
+  var key=lgItemKey(it);
+  var btn=document.getElementById("lgWrongBtn");
+  if(btn) btn.textContent = wrongBook[key] ? "✓ 已在错题本（点此移出）" : "＋ 加入错题本";
+}
+
 
 
 // ===== 个人学习报告 =====
@@ -127021,5 +127114,5 @@ function renderReport(){
   </div>
 </div>
 
-</body>
+<button id="backToTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" class="fixed bottom-6 left-6 w-12 h-12 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition-all opacity-0 pointer-events-none z-50 flex items-center justify-center text-xl">↑</button><script>window.addEventListener("scroll",function(){var b=document.getElementById("backToTopBtn");if(b){if(window.scrollY>300){b.classList.remove("opacity-0","pointer-events-none");b.classList.add("opacity-100");}else{b.classList.add("opacity-0","pointer-events-none");b.classList.remove("opacity-100");}}});</script></body>
 </html>
