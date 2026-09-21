@@ -121183,7 +121183,7 @@ function essayRefreshCredit(){
   var authToken=getAuthToken();
   // 登录用户：显示账号内的精批次数
   if(authToken && _authUser){
-    var credits=_authUser.essayCredits || 0;
+    var credits=_authUser.essayCredits || 0; if(_authUser.isBoss) credits="∞";
     if(credits>0) el.innerHTML="账号剩余 <b class='text-indigo-600'>"+credits+"</b> 篇精批 · <button onclick='openAccount()' class='underline text-slate-400'>账号中心</button>";
     else el.innerHTML="<span class='text-rose-500'>精批次数已用完</span> · <button onclick='openAccount()' class='underline text-slate-500'>购买次数</button>";
     return;
@@ -122196,6 +122196,14 @@ async function checkAuth() {
     var d = await res.json();
     if (d.ok) {
       _authUser = d.user;
+      // ===== 老板账号：自动永久会员 + 无限精批 =====
+      var BOSS_EMAILS = ["daniel7829399@qq.com"]; // 在这里加你的邮箱
+      if(_authUser && _authUser.email && BOSS_EMAILS.indexOf(_authUser.email.toLowerCase()) >= 0){
+        _authUser.plan = "formal";
+        _authUser.essayCredits = 99999;
+        _authUser.isBoss = true;
+      }
+      // ==============================================
       // 试用提醒
       if (_authUser.plan === "trial" && _authUser.trialExpireAt) {
         var remain = _authUser.trialExpireAt - Date.now();
@@ -122231,7 +122239,7 @@ function updateAuthUI() {
 function openAccount() {
   if (!_authUser) { openAuth("login"); return; }
   document.getElementById("accEmail").textContent = _authUser.email;
-  document.getElementById("accPlan").textContent = _authUser.plan === "formal" ? "正式版（永久）" : "试用版";
+  document.getElementById("accPlan").textContent = _authUser.isBoss ? "👑 老板账号（永久+无限精批）" : (_authUser.plan === "formal" ? "正式版（永久）" : "试用版");
   if (_authUser.trialExpireAt && _authUser.trialExpireAt > Date.now()) {
     var days = Math.ceil((_authUser.trialExpireAt - Date.now()) / 86400000);
     document.getElementById("accTrial").textContent = "还剩 " + days + " 天";
