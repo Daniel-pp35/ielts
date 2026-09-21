@@ -121184,7 +121184,7 @@ function essayRefreshCredit(){
   // 登录用户：显示账号内的精批次数
   if(authToken && _authUser){
     var credits=_authUser.essayCredits || 0; if(_authUser.isBoss) credits="∞";
-    if(credits>0) el.innerHTML="账号剩余 <b class='text-indigo-600'>"+credits+"</b> 篇精批 · <button onclick='openAccount()' class='underline text-slate-400'>账号中心</button>";
+    if(credits>0 || credits==="∞") el.innerHTML="账号剩余 <b class='text-indigo-600'>"+credits+"</b> 篇精批 · <button onclick='openAccount()' class='underline text-slate-400'>账号中心</button>";
     else el.innerHTML="<span class='text-rose-500'>精批次数已用完</span> · <button onclick='openAccount()' class='underline text-slate-500'>购买次数</button>";
     return;
   }
