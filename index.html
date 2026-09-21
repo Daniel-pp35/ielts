@@ -122268,7 +122268,7 @@ async function accActivate() {
     _authUser = d.user;
     msg.textContent = "✅ " + (d.msg || "激活成功"); msg.className = "text-xs mt-1 text-emerald-600";
     document.getElementById("accCredits").textContent = (_authUser.essayCredits || 0) + " 篇";
-    document.getElementById("accPlan").textContent = _authUser.plan === "formal" ? "正式版（永久）" : "试用版";
+    document.getElementById("accPlan").textContent = _authUser.isBoss ? "👑 老板账号（永久+无限精批）" : (_authUser.plan === "formal" ? "正式版（永久）" : "试用版");
   } catch (e) {
     msg.textContent = "网络错误"; msg.className = "text-xs mt-1 text-red-500";
   }
