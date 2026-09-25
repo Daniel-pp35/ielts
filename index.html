@@ -131,7 +131,7 @@
   <div class="flex items-center justify-between mb-6">
     <button onclick="backHomeFromDay()" class="text-slate-500 hover:text-slate-800 text-sm">← 首页</button>
     <h2 class="font-bold text-lg text-slate-800">80天打卡计划</h2>
-    <a href="https://www.kufaka.com/item/43573v" target="_blank" rel="noopener" class="text-xs bg-gradient-to-r from-purple-600 to-pink-500 text-white px-3 py-1.5 rounded-lg font-semibold hover:opacity-90">🛒 永久解锁 ¥19.9</a>
+    <a href="https://www.kufaka.com/item/43573v" target="_blank" rel="noopener" class="text-xs bg-gradient-to-r from-purple-600 to-pink-500 text-white px-3 py-1.5 rounded-lg font-semibold hover:opacity-90">🛒 永久解锁 ¥19.9</a> <button onclick="openCardModal()" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 px-3 py-1.5 rounded-lg font-semibold border border-purple-200">🎫 卡密激活（不区分会员和批改次卡）</button>
   </div>
   <div class="bg-emerald-50 rounded-xl p-4 mb-6 text-sm text-slate-600 text-center">
     每天10句，共80天 · 点击任意 Day 开始/继续打卡
@@ -143,7 +143,7 @@
 <div id="topicPhrasePage" class="hidden max-w-4xl mx-auto px-4 md:px-6 py-8">
   <div class="flex items-center justify-between mb-6">
     <button onclick="backHomeFromTP()" class="text-slate-500 hover:text-slate-800 text-sm">← 首页</button>
-    <h2 class="font-bold text-lg text-slate-800">话题词组 · 地道搭配</h2>
+    <h2 class="font-bold text-lg text-slate-800">话题词组 · 地道搭配</h2> <button onclick="openCardModal()" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 px-3 py-1.5 rounded-lg font-semibold border border-purple-200">🎫 卡密激活（不区分会员和批改次卡）</button>
     <div class="w-12"></div>
   </div>
   <div class="bg-teal-50 rounded-xl p-4 mb-4 text-sm text-slate-600 text-center">
@@ -169,7 +169,7 @@
 <div id="beginnerPage" class="hidden max-w-3xl mx-auto px-4 md:px-6 py-8">
   <div class="flex items-center justify-between mb-6">
     <button onclick="backHomeFromBeginner()" class="text-slate-500 hover:text-slate-800 text-sm">← 首页</button>
-    <h2 class="font-bold text-lg text-slate-800">新手入门 · 从零写出大作文</h2>
+    <h2 class="font-bold text-lg text-slate-800">新手入门 · 从零写出大作文</h2> <button onclick="openCardModal()" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 px-3 py-1.5 rounded-lg font-semibold border border-purple-200">🎫 卡密激活（不区分会员和批改次卡）</button>
     <div class="w-12"></div>
   </div>
   <div class="flex gap-2 mb-6 text-sm overflow-x-auto">
@@ -257,6 +257,7 @@
     <div class="flex items-center gap-3">
       <button onclick="backHomeFromLg()" class="text-slate-500 hover:text-slate-700 text-sm font-medium">← 返回首页</button>
       <a href="https://www.kufaka.com/item/43573v" target="_blank" rel="noopener" class="text-xs bg-gradient-to-r from-purple-600 to-pink-500 text-white px-3 py-1.5 rounded-lg font-semibold hover:opacity-90">🛒 永久解锁 ¥19.9</a>
+      <button onclick="openCardModal()" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 px-3 py-1.5 rounded-lg font-semibold border border-purple-200">🎫 卡密激活（不区分会员和批改次卡）</button>
     </div>
     <div class="text-right">
       <h2 class="text-2xl font-bold text-slate-800">📝 L&G 句型改写训练</h2>
@@ -333,7 +334,7 @@
 <div id="essayListPage" class="hidden max-w-4xl mx-auto px-4 md:px-6 py-8">
   <div class="flex items-center justify-between mb-6">
     <button onclick="backHomeFromEssay()" class="text-slate-500 hover:text-slate-800 text-sm">← 首页</button>
-    <h2 class="font-bold text-lg text-slate-800">整篇精批 · 选题</h2>
+    <h2 class="font-bold text-lg text-slate-800">整篇精批 · 选题</h2>     <button onclick="openCardModal()" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 px-3 py-1.5 rounded-lg font-semibold border border-purple-200">🎫 卡密激活（不区分会员和批改次卡）</button>
     <div class="w-12"></div>
   </div>
   <div class="bg-indigo-50 rounded-xl p-4 mb-5 text-sm text-slate-600">
@@ -383,7 +384,7 @@
   <div class="flex items-center justify-between mb-5">
     <button onclick="backToEssayList()" class="text-slate-500 hover:text-slate-800 text-sm">← 选题</button>
     <h2 class="font-bold text-lg text-slate-800">整篇写作工作台</h2>
-    <div class="w-12"></div>
+    <button onclick="openCardModal()" class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-700 px-3 py-1.5 rounded-lg font-semibold border border-blue-200">🎫 卡密激活（不区分会员和批改次卡）</button>
   </div>
   <!-- 题目 -->
   <div class="bg-slate-800 text-white rounded-xl p-5 mb-4">
@@ -436,7 +437,7 @@
 
 <!-- ============ 个人学习报告 ============ -->
 <div id="studyReportPage" class="hidden max-w-4xl mx-auto px-4 md:px-6 py-8">
-  <div class="flex items-center justify-between mb-6"><button onclick="backHomeFromReport()" class="text-slate-500 hover:text-slate-700 text-sm font-medium">← 返回首页</button><div class="text-right"><h2 class="text-2xl font-bold text-slate-800">📊 个人学习报告</h2><p class="text-sm text-slate-500 mt-1">记录你的每一步成长</p></div>
+  <div class="flex items-center justify-between mb-6"><button onclick="backHomeFromReport()" class="text-slate-500 hover:text-slate-700 text-sm font-medium">← 返回首页</button><div class="text-right"><div class="flex items-center justify-between mb-4"><h2 class="text-2xl font-bold text-slate-800">📊 个人学习报告</h2><button onclick="openCardModal()" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 px-3 py-1.5 rounded-lg font-semibold border border-purple-200">🎫 卡密激活（不区分会员和批改次卡）</button></div><p class="text-sm text-slate-500 mt-1">记录你的每一步成长</p></div>
   </div>
   <!-- 总览卡片 -->
   <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
@@ -485,7 +486,7 @@
 <div id="essayRecordPage" class="hidden max-w-4xl mx-auto px-4 md:px-6 py-8">
   <div class="flex items-center justify-between mb-6">
     <button onclick="backHomeFromEssayRecord()" class="text-slate-500 hover:text-slate-800 text-sm">← 首页</button>
-    <h2 class="font-bold text-lg text-slate-800">批改记录</h2>
+    <h2 class="font-bold text-lg text-slate-800">批改记录</h2> <button onclick="openCardModal()" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 px-3 py-1.5 rounded-lg font-semibold border border-purple-200">🎫 卡密激活（不区分会员和批改次卡）</button>
     <button onclick="essayClearRecord()" class="text-xs text-rose-600 border border-rose-200 hover:bg-rose-50 rounded-lg px-3 py-1.5">清空全部</button>
   </div>
   <div class="bg-slate-100 rounded-xl p-4 mb-5 text-sm text-slate-600">
@@ -503,7 +504,7 @@
     <div class="flex items-center gap-3">
       
       <button id="authBtn" onclick="openAuth('login')" class="text-slate-500 hover:text-purple-600 text-sm flex items-center gap-1">🔑 登录/注册</button>
-      <button onclick="openCardModal()" class="text-slate-500 hover:text-purple-600 text-sm flex items-center gap-1" title="卡密激活">🎫 <span id="cardBtnText">卡密激活</span></button>
+      <button onclick="openCardModal()" class="text-slate-500 hover:text-purple-600 text-sm flex items-center gap-1" title="卡密激活（不区分会员和批改次卡）">🎫 <span id="cardBtnText">卡密激活（不区分会员和批改次卡）</span></button>
     </div>
   </div>
 
@@ -611,7 +612,7 @@
 <div id="settingsModal" class="hidden fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
   <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 max-h-[90vh] overflow-y-auto">
     <div class="flex items-center justify-between mb-4">
-      <h3 class="font-bold text-lg">🎫 卡密激活</h3>
+      <h3 class="font-bold text-lg">🎫 卡密激活（不区分会员和批改次卡）</h3>
       <button onclick="closeSettings()" class="text-slate-400 hover:text-slate-700 text-xl">×</button>
     </div>
 
@@ -643,7 +644,7 @@
     <button onclick="backFromWrong()" class="text-sm text-slate-500 hover:text-slate-800" id="wrongBackBtn">← 返回首页</button>
     <div id="wrongSummary" class="text-xs text-slate-500"></div>
   </div>
-  <h2 class="text-xl font-bold text-slate-800 mb-1">📕 我的错题本</h2>
+  <div class="flex items-center justify-between mb-4"><h2 class="text-xl font-bold text-slate-800">📕 我的错题本</h2><button onclick="openCardModal()" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 px-3 py-1.5 rounded-lg font-semibold border border-purple-200">🎫 卡密激活（不区分会员和批改次卡）</button></div>
   <p class="text-xs text-slate-400 mb-4">永久保存你写错过的每一句：标明错误类型、原因和正确写法，可随时点「重新练习」，不会自动消失</p>
   <div class="flex gap-2 mb-3 flex-wrap text-xs">
     <button data-wf="all" onclick="setWrongFilter('all')" class="wf-btn px-3 py-1.5 rounded-full border border-slate-300">全部错题</button>
@@ -717,7 +718,7 @@
   <div class="flex items-center mb-4">
     <button onclick="backHomeFromCctr()" class="text-sm text-slate-500 hover:text-slate-800">← 返回首页</button>
     <a href="https://www.kufaka.com/item/43573v" target="_blank" rel="noopener" class="ml-3 text-xs bg-gradient-to-r from-purple-600 to-pink-500 text-white px-3 py-1.5 rounded-lg font-semibold hover:opacity-90">🛒 永久解锁 ¥19.9</a>
-    <span class="ml-auto text-xs text-slate-400">TR 任务回应 · CC 连贯衔接 专项构思</span>
+    <button onclick="openCardModal()" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 px-3 py-1.5 rounded-lg font-semibold border border-purple-200">🎫 卡密激活（不区分会员和批改次卡）</button> <span class="ml-auto text-xs text-slate-400">TR 任务回应 · CC 连贯衔接 专项构思</span>
   </div>
   <div id="cctrCats" class="flex flex-wrap gap-1.5 mb-4"></div>
 
@@ -122069,6 +122070,7 @@ function fmtRemain(ms) {
 }
 function cardDesc(c) {
   if (!c) return "";
+  if (c.plan === "essay") return "精批卡 · 剩余 " + (c.remaining || 0) + " 篇";
   if (c.plan === "trial") return "试用 · 剩余 " + fmtRemain(c.remainMs);
   return "已激活 · 永久使用";
 }
@@ -122087,6 +122089,11 @@ function updateCardUI() {
 }
 function openCardModal() {
   var c = getCard();
+  var titleEl = document.querySelector('#settingsModal h3');
+  if (titleEl) {
+    titleEl.innerHTML = "🎫 卡密激活（不区分会员和批改次卡）";
+    document.getElementById('cardInput').placeholder = "输入卡密，自动识别类型";
+  }
   document.getElementById("cardInput").value = c ? c.no : "";
   document.getElementById("cardState").innerHTML = c
     ? "当前卡密：" + c.no + "（" + cardDesc(c) + "）"
@@ -122094,7 +122101,13 @@ function openCardModal() {
   document.getElementById("settingsModal").classList.remove("hidden");
 }
 function applyCardState(no, cs) {
-  saveCard({ no: no, plan: cs.plan, remainMs: cs.remainMs, expireAt: cs.expireAt });
+  if (cs.plan === "essay") {
+    // 精批次卡：存在精批卡位置
+    setEssayCard({ no: no, plan: "essay", remaining: cs.remaining || cs.credits || 0 });
+  } else {
+    // 会员卡（formal/trial）：存在会员卡位置
+    saveCard({ no: no, plan: cs.plan, remainMs: cs.remainMs, expireAt: cs.expireAt });
+  }
 }
 function activateCard() {
   var no = document.getElementById("cardInput").value.trim().toUpperCase();
@@ -122110,7 +122123,8 @@ function activateCard() {
     applyCardState(no, d.cardState);
     statPush("login");
     updateCardUI();
-    tip.innerHTML = "<span class='text-emerald-600'>✅ 激活成功！" + cardDesc(getCard()) + "</span>";
+    var activatedCard = (d.cardState && d.cardState.plan === "essay") ? getEssayCard() : getCard();
+    tip.innerHTML = "<span class='text-emerald-600'>✅ 激活成功！" + cardDesc(activatedCard) + "</span>";
     setTimeout(function(){ closeSettings(); }, 1000);
   }).catch(function(){ tip.innerHTML = "<span class='text-red-600'>网络错误，请重试</span>"; });
 }
