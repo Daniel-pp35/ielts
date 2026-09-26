@@ -588,7 +588,7 @@
         <div class="text-xs text-slate-400 mt-1">💡 快捷键：Ctrl+Enter 提交解析 · 提交后按 空格 跳到下一题</div>
 
     <div class="flex flex-wrap gap-2 mt-3">
-      <button onclick="submitAnswer()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg text-sm font-medium">提交并显示解析</button> <button id="manualWrongBtn" onclick="manualToggleWrong()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 px-4 py-2 rounded-lg text-sm font-semibold border border-rose-200">＋ 加入错题本</button>
+      <button onclick="submitAnswer()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg text-sm font-medium">提交批改并显示解析</button> <button id="manualWrongBtn" onclick="manualToggleWrong()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 px-4 py-2 rounded-lg text-sm font-semibold border border-rose-200">＋ 加入错题本</button>
       <button onclick="aiPolishOnly()" class="bg-purple-50 hover:bg-purple-100 text-purple-700 px-4 py-2 rounded-lg text-sm">🤖 AI润色</button>
       <button id="btnShowAns" onclick="showAnswerOnly()" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 px-4 py-2 rounded-lg text-sm">显示解析</button>
       <button id="btnHideAns" onclick="hideAnalysis()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 px-4 py-2 rounded-lg text-sm disabled:opacity-40 disabled:cursor-not-allowed" disabled>隐藏解析</button>
@@ -612,7 +612,7 @@
         <div id="aiResult" class="text-slate-700 text-sm leading-6"></div>
         
         <div id="aiEmpty" class="text-sm text-slate-500 py-2">
-          <p class="mb-2">💡 先激活卡密，再输入译文点「提交并显示解析」，AI 会自动批改（单复数/词性/时态/搭配等）。</p>
+          <p class="mb-2">💡 先激活卡密，再输入译文点「提交批改并显示解析」，AI 会自动批改（单复数/词性/时态/搭配等）。</p>
           <button onclick="openCardModal()" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium">🎫 激活卡密</button>
         </div>
       </div>
@@ -122014,7 +122014,7 @@ function showAnalysis(ai) {
     aiBadge.textContent = "批改中...";
     if (!userText) {
       aiLoading.style.display = "none";
-      aiResult.innerHTML = "<span class='text-slate-400'>（你还没有输入译文，AI 无法批改。请先在输入框写下你的翻译再点「提交并显示解析」。）</span>";
+      aiResult.innerHTML = "<span class='text-slate-400'>（你还没有输入译文，AI 无法批改。请先在输入框写下你的翻译再点「提交批改并显示解析」。）</span>";
       aiBadge.textContent = "";
     } else if (typeof aiReview === "function") {
       aiReview(it, userText);
@@ -128474,7 +128474,39 @@ function task1_loadSpecial() {
   document.getElementById("task1_specialIdx").textContent = task1_specialIdx + 1;
   document.getElementById("task1_specialTotal").textContent = list.length;
   document.getElementById("task1_specialQuestion").textContent = item.cn;
-  var hintText = "💡 高分句型建议：" + (item.highScorePattern || "参考解析中的多种表达");
+  // 顶部提示：结构引导，不出现句子骨架（杜绝填空）
+  var hintText = "";
+  if (item.highScorePattern) {
+    var gtext=(function(p){
+      if (/^The (graph|bar chart|pie chart|table|line graph|flow chart|two maps|chart)/.test(p)) return "【图表开头句】用「图表类型 + 描述动词(illustrate/depict/show/compare) + 描述内容」的主谓宾结构";
+      if (/^\[时间\] witnessed/.test(p)) return "【时间拟人化】用「时间 + witnessed + 变化名词」写时间见证了某变化";
+      if (/^Between \[时间/.test(p)) return "【时间段对比】用 Between A and B + 主语 + 变化动词，框定对比时间范围";
+      if (/^In \[时间1\]/.test(p)) return "【时间点对比】用 In 时间1 + 状态，再接 but by 时间2 + 新状态，写前后对比";
+      if (/^After /.test(p)) return "【After + 分词】用 After + 现在分词短语做时间状语，再写之后的走势";
+      if (/^Compared with/.test(p)) return "【分词对比】用 Compared with... 作状语引出对比";
+      if (/^Despite /.test(p)) return "【让步转折】用 Despite + 总体趋势 + there was a brief...，写趋势中的例外";
+      if (/^By the end of/.test(p)) return "【过去完成时】用 By + 过去时间 + had done 写截止那时已超过";
+      if (/^By \[时间\]/.test(p)) return "【被动+时间】用 By + 过去时间 + 被动语态(had been demolished/replaced/converted)，写地图上旧设施的变迁";
+      if (/^By \[将来时间\]/.test(p)) return "【将来预测】用 By + 将来时间 + be expected to / are projected to，写未来占比";
+      if (/^Among all/.test(p)) return "【范围+极值】用 Among all + 范围 + had the highest/lowest 点出极值";
+      if (/^Among the/.test(p)) return "【范围排序】用 Among + 数量 + 范围，接最高/最低 + at 数值，顺带 while 对比";
+      if (/^Over the/.test(p)) return "【跨期描述】用 Over the ... period 引出整段，接 grew from...to...";
+      if (/^Throughout the/.test(p)) return "【稳定描述】用 Throughout the period + remained stable/fluctuated";
+      if (/^In \[时间\]/.test(p)) return "【存在句+方位】地图题用 There was + 设施 + in the + 方位";
+      if (/^In the centre/.test(p)) return "【地图方位】用 In the centre of... + was preserved + with... around it，写保留与新建并存";
+      if (/^The \[方位\]/.test(p)) return "【地图方位对比】用 The 方位 + bank/area + was 旧用途 in 时间1, but by 时间2 it had become 新用途";
+      if (/^A new /.test(p)) return "【地图新增】用 A new + 设施 + was constructed/built in 方位，接分词短语写带来的改善";
+      if (/^The original /.test(p)) return "【地图变迁】用 The original + 设施 + was closed/converted/redeveloped into 新用途，写旧改新";
+      if (/^The whole process/.test(p)) return "【流程总起】用 begins with... then... finally... 总起流程";
+      if (/^The average income|^The population density/.test(p)) return "【倍数对比】用 A was 倍数 times that of B + but 转折，写差距与另一维度";
+      if (/^\[A\]\x27s market share|^\[A\] accounted/.test(p)) return "【占比描述】用 主语 + accounted for + 数值，写份额占比，while 再接另一占比对比";
+      if (/^(First|Next,|After roasting|Before packaging|This cycle|Finally,|Throughout the process|Waste water)/.test(p)) return "【步骤衔接】用 First/Next/After/Finally 串联流程步骤";
+      return "【描述句】先定主语再写变化或对比，注意时态与主谓一致";
+    })(item.highScorePattern);
+    hintText = "✍️ 句型结构提示：" + gtext + "。按这个结构自己组织完整英文句，别照抄模板。";
+  } else {
+    hintText = "✍️ 请结合本题信息，自己构思句型写英文（可参考解析中的多种表达），写完点「提交批改并显示解析」让 AI 检查。";
+  }
   document.getElementById("task1_specialHint").textContent = hintText;
   document.getElementById("task1_specialHint").classList.remove("hidden");
   // 恢复保存的答案
@@ -128570,12 +128602,42 @@ function task1_specialSubmit() {
     });
   }
   
-  // 高分句型建议
+  // 高分句型建议：改为结构引导（只提示用什么句型结构与思路，不出现句子骨架，杜绝填空）
+  var guideHtml = "";
+  var guideText = "";
   if (item.highScorePattern) {
-    answerHtml += '<div class="mt-3 p-3 bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg border border-amber-200">' +
-      '<div class="text-xs font-bold text-amber-800 mb-1">🏆 高分句型公式</div>' +
-      '<div class="text-sm text-slate-700 font-mono">' + item.highScorePattern + '</div></div>';
+    guideText = (function(p){
+      if (/^The (graph|bar chart|pie chart|table|line graph|flow chart|two maps|chart)/.test(p)) return "【图表开头句】用「主语(图表类型) + 描述动词(illustrate/depict/show/compare) + 描述内容」的主谓宾结构；描述动词要换着用，别总是 show。";
+      if (/^\[时间\] witnessed/.test(p)) return "【时间拟人化】把时间当主语，用 witness + 变化名词，写「某时间见证了……的激增/下滑」，比 It showed 更生动。";
+      if (/^Between \[时间/.test(p)) return "【时间段对比】用 Between 时间1 and 时间2 + 主语 + 变化动词，框定对比的时间范围，再写总体走向。";
+      if (/^In \[时间1\]/.test(p)) return "【时间点对比】用 In 时间1 + 状态描述，再接 but by 时间2 + 新状态（twice that of / much faster），写前后对比。";
+      if (/^After /.test(p)) return "【After + 分词】用 After + 现在分词短语做时间状语（After reaching a peak / After an initial decline），主句再写之后的走势。";
+      if (/^Compared with/.test(p)) return "【分词对比】用过去分词短语 Compared with... 作状语，先抛对比对象，再写本体的变化，比 A increased more than B 更高级。";
+      if (/^Despite /.test(p)) return "【让步转折】用 Despite + 总体趋势（the overall downward trend）+ there was a brief...，专门写趋势中的例外，比直说更有层次。";
+      if (/^By the end of/.test(p)) return "【过去完成时】用 By + 过去时间点 + had done，表示「截止那时某指标已超过另一指标」，比一般过去时更显功底。";
+      if (/^By \[时间\]/.test(p)) return "【被动+时间】用 By + 过去时间 + 被动语态(had been demolished/replaced/converted)，写地图上旧设施的变迁";
+      if (/^By \[将来时间\]/.test(p)) return "【将来预测】用 By + 将来时间 + be expected to / are projected to + account for，写对未来的预测占比。";
+      if (/^Among all/.test(p)) return "【范围+极值】用 Among all + 范围，接 had the highest/lowest + 指标（+ at 数值），一句话点出最高/最低。";
+      if (/^Among the/.test(p)) return "【范围排序】用 Among + 数量 + 范围，先写最高 at 数值，再 while 带出最低，信息紧凑。";
+      if (/^Over the/.test(p)) return "【跨期描述】用 Over the ... period 引出整段时间，再接 grew from...to...，交代起止与增幅。";
+      if (/^Throughout the/.test(p)) return "【稳定描述】用 Throughout the period + remained stable / fluctuated slightly，描述平稳或小幅波动。";
+      if (/^In \[时间\]/.test(p)) return "【存在句+方位】地图题用 There was + 设施 + in the + 方位，交代图中位置。";
+      if (/^In the centre/.test(p)) return "【地图方位】用 In the centre of... + was preserved + with many new buildings constructed around it，写保留与新建并存。";
+      if (/^The \[方位\]/.test(p)) return "【地图方位对比】用 The 方位 + bank/area + was 旧用途 in 时间1，but by 时间2 it had become 新用途，写同一位置的变迁。";
+      if (/^A new /.test(p)) return "【地图新增】用 A new + 设施 + was constructed/built in 方位，再接 improving/connecting 分词短语写带来的改善。";
+      if (/^The original /.test(p)) return "【地图变迁】用 The original + 设施 + was closed/converted/redeveloped into 新用途，写旧改新。";
+      if (/^The whole process/.test(p)) return "【流程总起】用 The whole process begins with... then... finally...，总起整个流程再分步展开。";
+      if (/^The average income|^The population density/.test(p)) return "【倍数对比】用 A was 倍数 times that of B + but 转折，写差距的同时带出另一个维度（生活成本/面积），论证更立体。";
+      if (/^\[A\]\x27s market share|^\[A\] accounted/.test(p)) return "【占比描述】用 主语 + accounted for + 数值，写份额占比，while 再接另一占比或倍数关系做对比。";
+      if (/^(First|Next,|After roasting|Before packaging|This cycle|Finally,|Throughout the process|Waste water)/.test(p)) return "【步骤衔接】用 First / Next / After / Before / Finally 等顺序词串联流程步骤，时态用一般现在时被动。";
+      return "【描述句】先定主语（图表/数据/人群/设施），再写变化或对比，注意动词时态与主谓一致。";
+    })(item.highScorePattern);
+    guideHtml = '<div class="mt-3 p-3 bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg border border-amber-200">' +
+      '<div class="text-xs font-bold text-amber-800 mb-1.5">✍️ 句型结构提示（只提示思路，句子请自己组织）</div>' +
+      '<div class="text-sm text-slate-700 leading-6">' + guideText + '</div>' +
+      '<div class="text-[11px] text-amber-700 mt-2">💡 按这个结构自己写出完整英文句，写完再点「提交批改并显示解析」让 AI 检查。</div></div>';
   }
+  answerHtml += guideHtml;
   
   // 精确语法分析（兼容字符串或对象数组两种数据格式）
   if (item.grammar_precise && (item.grammar_precise.length || typeof item.grammar_precise === "string")) {
@@ -128686,22 +128748,26 @@ function task1_specialSubmit() {
     });
   }
   
-  // 提示
+  // 写作提示（单独成块，放在AI批改下面）
+  var tipHtml = "";
   if (item.tip) {
-    answerHtml += '<div class="mt-3 text-sm text-amber-700 bg-amber-50 rounded-lg p-2"><b>💡 写作提示：</b>' + item.tip + '</div>';
+    tipHtml = '<div class="mt-3 text-sm text-amber-800 bg-amber-50 rounded-lg p-3 border border-amber-200"><b>💡 写作提示：</b>' + item.tip + '</div>';
   }
   
   answerHtml += '</div></div>';
   
-  // 无输入：只显示解析
+  // 无输入：也显示AI批改框（提示先写答案），解析+提示照常显示
   if (!userText) {
-    document.getElementById("task1_specialResult").innerHTML = answerHtml;
-    localStorage.setItem("task1_special_result_" + task1_specialIdx, answerHtml);
+    var aiWaitEmpty = '<div class="bg-purple-50 border border-purple-200 rounded-xl p-4 mb-3">' +
+      '<div class="font-bold text-purple-800 mb-2">🤖 AI批改结果</div>' +
+      '<div class="text-sm text-slate-500">请先在上方输入你的英文句子，再点「提交批改并显示解析」，AI 会自动按雅思标准检查你的语法、词汇和表达。</div></div>';
+    document.getElementById("task1_specialResult").innerHTML = aiWaitEmpty + tipHtml + answerHtml;
+    localStorage.setItem("task1_special_result_" + task1_specialIdx, aiWaitEmpty + tipHtml + answerHtml);
     return;
   }
   
-  // 有输入：显示解析 + AI批改中
-  document.getElementById("task1_specialResult").innerHTML = '<div class="bg-purple-50 border border-purple-200 rounded-xl p-4 mb-3"><div class="text-purple-600 font-medium">🤖 AI正在批改你的答案...</div><div class="text-xs text-slate-500 mt-1">请稍候，正在检查语法、词汇和表达</div></div>' + answerHtml;
+  // 有输入：显示 AI批改中 + 写作提示 + 解析
+  document.getElementById("task1_specialResult").innerHTML = '<div class="bg-purple-50 border border-purple-200 rounded-xl p-4 mb-3"><div class="text-purple-600 font-medium">🤖 AI正在批改你的答案...</div><div class="text-xs text-slate-500 mt-1">请稍候，正在检查语法、词汇和表达</div></div>' + tipHtml + answerHtml;
   
   // 调用AI批改（参考大作文方式）
   var reqBody = {
@@ -128735,8 +128801,8 @@ function task1_specialSubmit() {
       var aiHtml = '<div class="bg-purple-50 border border-purple-200 rounded-xl p-4 mt-3">' +
         '<div class="font-bold text-purple-800 mb-2">🤖 AI批改结果</div>' +
         '<div class="text-sm text-slate-700 leading-6">' + formatted + '</div></div>';
-      document.getElementById("task1_specialResult").innerHTML = aiHtml + answerHtml;
-      localStorage.setItem("task1_special_result_" + task1_specialIdx, aiHtml + answerHtml);
+      document.getElementById("task1_specialResult").innerHTML = aiHtml + tipHtml + answerHtml;
+      localStorage.setItem("task1_special_result_" + task1_specialIdx, aiHtml + tipHtml + answerHtml);
     } else {
       var errMsg = d.msg || "AI批改暂时不可用，请稍后重试";
       var errHtml = '<div class="bg-amber-50 border-2 border-amber-300 rounded-xl p-4 mt-3">' +
@@ -128744,8 +128810,8 @@ function task1_specialSubmit() {
         '<div class="text-sm text-slate-700 mb-2">' + errMsg + '</div>' +
         '<div class="text-xs text-slate-500 mb-3">可能原因：未登录/未激活卡密/网络波动。你可以先参考上面的参考答案和解析进行学习。</div>' +
         '<button onclick="task1_specialSubmit()" class="text-xs bg-amber-500 hover:bg-amber-600 text-white px-3 py-1.5 rounded font-medium">🔄 重新批改</button></div>';
-      document.getElementById("task1_specialResult").innerHTML = errHtml + answerHtml;
-      localStorage.setItem("task1_special_result_" + task1_specialIdx, errHtml + answerHtml);
+      document.getElementById("task1_specialResult").innerHTML = errHtml + tipHtml + answerHtml;
+      localStorage.setItem("task1_special_result_" + task1_specialIdx, errHtml + tipHtml + answerHtml);
     }
     task1_saveStat("special");
   }).catch(function(err) {
@@ -128753,8 +128819,8 @@ function task1_specialSubmit() {
       '<div class="font-bold text-rose-800 mb-2">❌ AI批改连接失败</div>' +
       '<div class="text-sm text-slate-700 mb-3">请检查网络后重试</div>' +
       '<button onclick="task1_specialSubmit()" class="text-xs bg-rose-500 hover:bg-rose-600 text-white px-3 py-1.5 rounded font-medium">🔄 重新批改</button></div>';
-    document.getElementById("task1_specialResult").innerHTML = netErrHtml + answerHtml;
-    localStorage.setItem("task1_special_result_" + task1_specialIdx, netErrHtml + answerHtml);
+    document.getElementById("task1_specialResult").innerHTML = netErrHtml + tipHtml + answerHtml;
+    localStorage.setItem("task1_special_result_" + task1_specialIdx, netErrHtml + tipHtml + answerHtml);
   });
 }
 
@@ -128935,7 +129001,7 @@ function task1_updateStats() {
     <div id="task1_specialHint" class="text-sm text-amber-700 bg-amber-50 rounded-lg p-3 mb-3 hidden"></div>
     <textarea id="task1_specialInput" rows="3" class="w-full border-2 border-purple-200 focus:border-purple-500 rounded-xl p-3 text-base focus:outline-none mb-3" placeholder="写下你的答案..."></textarea>
     <div class="flex flex-wrap gap-2">
-      <button onclick="task1_specialSubmit()" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm">提交并显示解析</button>
+      <button onclick="task1_specialSubmit()" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm">提交批改并显示解析</button>
       <button onclick="task1_specialAddToWrong()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 px-4 py-2 rounded-lg text-sm border border-rose-200">＋ 加入错题本</button>
       <button onclick="task1_specialPrev()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 px-4 py-2 rounded-lg text-sm">← 上一题</button>
       <button onclick="task1_specialNext()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 px-4 py-2 rounded-lg text-sm">下一题 →</button>
