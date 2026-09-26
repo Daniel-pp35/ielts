@@ -21,6 +21,7 @@
   .es-sec:hover { box-shadow: 0 6px 18px rgba(15,23,42,.08); transform: translateY(-1px); }
   /* 范文/成文正文：更舒展的排版 */
   .es-model { line-height: 2; font-size: 14.5px; color:#1e293b; }
+  .es-para-gap { height:10px; }
   .es-model .zh { background:#f1f5f9; border-radius:8px; padding:6px 10px; margin-top:6px; color:#64748b; font-size:13px; line-height:1.7; display:block; }
   /* ===== 单句批改卡片：原句/讲解/改法 各自一块，清楚不花 ===== */
   .snt { background:#fbfdff; border:1px solid #e6edf5; border-radius:12px; padding:10px 12px; margin:11px 0; }
@@ -434,23 +435,49 @@
 <div id="studyReportPage" class="hidden max-w-4xl mx-auto px-4 md:px-6 py-8">
   <div class="flex items-center justify-between mb-6"><button onclick="backHomeFromReport()" class="text-slate-500 hover:text-slate-700 text-sm font-medium">← 返回首页</button><div class="text-right"><div class="flex items-center justify-between mb-4"><h2 class="text-2xl font-bold text-slate-800">📊 个人学习报告</h2><button onclick="openCardModal()" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 px-3 py-1.5 rounded-lg font-semibold border border-purple-200">🎫 卡密激活（不区分会员和批改次卡）</button></div><p class="text-sm text-slate-500 mt-1">记录你的每一步成长</p></div>
   </div>
+  <!-- 大作文模块 -->
+  <div class="flex items-center gap-2 mb-3">
+    <div class="w-4 h-4 rounded bg-gradient-to-br from-indigo-500 to-purple-600"></div>
+    <div class="text-sm font-bold text-slate-700">大作文 Task 2 模块</div>
+  </div>
   <!-- 总览卡片 -->
   <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
     <div class="bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-2xl p-4 text-white shadow-lg">
       <div class="text-3xl font-bold" id="repSentence">0</div>
-      <div class="text-xs opacity-80 mt-1">中译英练习</div>
+      <div class="text-xs opacity-80 mt-1">大作文中译英</div>
+      <div class="text-[11px] opacity-70 mt-1 font-medium" id="repSentenceTime">学习 0 分钟</div>
     </div>
     <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-4 text-white shadow-lg">
       <div class="text-3xl font-bold" id="repCctr">0</div>
-      <div class="text-xs opacity-80 mt-1">TR/CC构思</div>
+      <div class="text-xs opacity-80 mt-1">大作文TR/CC构思</div>
+      <div class="text-[11px] opacity-70 mt-1 font-medium" id="repCctrTime">学习 0 分钟</div>
     </div>
     <div class="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl p-4 text-white shadow-lg">
       <div class="text-3xl font-bold" id="repLg">0</div>
-      <div class="text-xs opacity-80 mt-1">LG改写训练</div>
+      <div class="text-xs opacity-80 mt-1">大作文LG改写训练</div>
+      <div class="text-[11px] opacity-70 mt-1 font-medium" id="repLgTime">学习 0 分钟</div>
     </div>
     <div class="bg-gradient-to-br from-rose-500 to-rose-600 rounded-2xl p-4 text-white shadow-lg">
       <div class="text-3xl font-bold" id="repReview">0</div>
-      <div class="text-xs opacity-80 mt-1">整篇精批</div>
+      <div class="text-xs opacity-80 mt-1">大作文整篇精批</div>
+      <div class="text-[11px] opacity-70 mt-1 font-medium" id="repReviewTime">学习 0 分钟</div>
+    </div>
+  </div>
+  <!-- 小作文模块 -->
+  <div class="flex items-center gap-2 mb-3">
+    <div class="w-4 h-4 rounded bg-gradient-to-br from-sky-500 to-cyan-500"></div>
+    <div class="text-sm font-bold text-slate-700">小作文 Task 1 模块</div>
+  </div>
+  <div class="grid grid-cols-2 gap-3 mb-6">
+    <div class="bg-gradient-to-br from-sky-500 to-cyan-500 rounded-2xl p-4 text-white shadow-lg">
+      <div class="text-3xl font-bold" id="repT1Special">0</div>
+      <div class="text-xs opacity-80 mt-1">小作文句子训练</div>
+      <div class="text-[11px] opacity-70 mt-1 font-medium" id="repT1SpecialTime">学习 0 分钟</div>
+    </div>
+    <div class="bg-gradient-to-br from-cyan-600 to-teal-500 rounded-2xl p-4 text-white shadow-lg">
+      <div class="text-3xl font-bold" id="repT1Essay">0</div>
+      <div class="text-xs opacity-80 mt-1">小作文整篇精批</div>
+      <div class="text-[11px] opacity-70 mt-1 font-medium" id="repT1EssayTime">学习 0 分钟</div>
     </div>
   </div>
   <!-- 学习时长 + 打卡天数 -->
@@ -463,6 +490,20 @@
       <div class="text-sm text-slate-500 mb-1">打卡天数</div>
       <div class="text-2xl font-bold text-slate-800" id="repDays">0 天</div>
     </div>
+  </div>
+  <!-- 各板块学习时长 -->
+  <div class="bg-white rounded-2xl p-5 shadow border border-slate-100 mb-6">
+    <div class="text-sm font-bold text-slate-700 mb-4">⏱ 各板块学习时长</div>
+    <div class="flex items-center gap-2 mb-3">
+      <div class="w-3 h-3 rounded bg-indigo-500"></div><div class="text-xs font-semibold text-slate-600">大作文 Task 2</div>
+      <div class="flex-1 text-right text-[11px] text-slate-400" id="repBigSum"></div>
+    </div>
+    <div class="space-y-2.5 mb-5" id="repBigMods"></div>
+    <div class="flex items-center gap-2 mb-3">
+      <div class="w-3 h-3 rounded bg-sky-500"></div><div class="text-xs font-semibold text-slate-600">小作文 Task 1</div>
+      <div class="flex-1 text-right text-[11px] text-slate-400" id="repT1Sum"></div>
+    </div>
+    <div class="space-y-2.5" id="repT1Mods"></div>
   </div>
   <!-- 每日练习柱状图 -->
   <div class="bg-white rounded-2xl p-5 shadow border border-slate-100 mb-6">
@@ -641,6 +682,11 @@
   </div>
   <div class="flex items-center justify-between mb-4"><h2 class="text-xl font-bold text-slate-800">📕 我的错题本</h2><button onclick="openCardModal()" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 px-3 py-1.5 rounded-lg font-semibold border border-purple-200">🎫 卡密激活（不区分会员和批改次卡）</button></div>
   <p class="text-xs text-slate-400 mb-4">永久保存你写错过的每一句：标明错误类型、原因和正确写法，可随时点「重新练习」，不会自动消失</p>
+  <!-- 板块学习时长概览 -->
+  <div class="bg-white rounded-2xl shadow border border-slate-100 p-4 mb-4">
+    <div class="text-sm font-bold text-slate-700 mb-3">⏱ 各板块学习时长</div>
+    <div id="wrongModTime" class="space-y-2"></div>
+  </div>
   <div class="flex gap-2 mb-3 flex-wrap text-xs">
     <button data-wf="all" onclick="setWrongFilter('all')" class="wf-btn px-3 py-1.5 rounded-full border border-slate-300">全部错题</button>
     <button data-wf="todo" onclick="setWrongFilter('todo')" class="wf-btn px-3 py-1.5 rounded-full border border-slate-300">未重新练习</button>
@@ -121220,7 +121266,7 @@ function essayMd(t){
     var closeList=function(){if(inList){h+="</ul>";inList=false;}};
     lines.forEach(function(ln){
       var L=ln.trim();
-      if(!L){return;} // 空行不打断
+      if(!L){flush();closeSnt();closeList();h+="<div class='es-para-gap'></div>";return;} // 空行分段
       var isQ=/^原句[:：]\s?/.test(L),isF=/^(改成|修改后|改为|正确)[:：]?\s?/.test(L),isZ=/^中文[:：]\s?/.test(L);
       var m=L.match(/^[-•·]\s+(.*)$/),num=L.match(/^\d+[.、)]\s+(.*)$/);
       if(isQ){closeSnt();closeList();openSnt();cur="quote";buf=[inline(L.replace(/^原句[:：]\s?/,""))];return;}
@@ -121339,7 +121385,7 @@ function essayMdForDoc(t){
     var closeList=function(){if(inList){h+="</ul>";inList=false;}};
     lines.forEach(function(ln){
       var L=ln.trim();
-      if(!L){return;}
+      if(!L){flush();closeSnt();closeList();h+="<div style='height:8px'></div>";return;} // 空行分段
       var isQ=/^原句[:：]\s?/.test(L),isF=/^(改成|修改后|改为|正确)[:：]?\s?/.test(L),isZ=/^中文[:：]\s?/.test(L);
       var m=L.match(/^[-•·]\s+(.*)$/),num=L.match(/^\d+[.、)]\s+(.*)$/);
       if(isQ){closeSnt();closeList();openSnt();cur="quote";buf=[inline(L.replace(/^原句[:：]\s?/,""))];return;}
@@ -122370,8 +122416,10 @@ if (typeof checkAuth === "function") checkAuth();
 var WRONG_KEY = "ielts_cnen_wrong_v1";
 var STUDYTIME_KEY = "ielts_cnen_studytime_v1";
 var STUDYSTAT_KEY = "ielts_cnen_study_stat_v1";
+var STUDYMOD_KEY = "ielts_cnen_studymod_v1";
 var wrongBook = {};
 var studyTime = {};
+var studyMod = {};
 var studyStat = {dates:{},total:{sentence:0,cctr:0,essay:0,review:0,lg:0}};
 // 错题本：永久保留每一道错题与重练状态，不设轮次、不自动消失
 var ERROR_TYPE_DICT = ["单复数","词性","时态","主谓一致","冠词","搭配","语序","标点","拼写","比较级","被动","介词","冗余","残缺"];
@@ -122380,6 +122428,8 @@ function loadWrong() { try { var r=localStorage.getItem(WRONG_KEY); wrongBook = 
 function saveWrong() { try { localStorage.setItem(WRONG_KEY, JSON.stringify(wrongBook)); } catch(e){} }
 function loadStudyTime() { try { var r=localStorage.getItem(STUDYTIME_KEY); studyTime = r ? (JSON.parse(r)||{}) : {}; } catch(e){ studyTime={}; } }
 function saveStudyTime() { try { localStorage.setItem(STUDYTIME_KEY, JSON.stringify(studyTime)); } catch(e){} }
+function loadStudyMod() { try { var r=localStorage.getItem(STUDYMOD_KEY); studyMod = r ? (JSON.parse(r)||{}) : {}; } catch(e){ studyMod={}; } }
+function saveStudyMod() { try { localStorage.setItem(STUDYMOD_KEY, JSON.stringify(studyMod)); } catch(e){} }
 function loadStudyStat() { try { var r=localStorage.getItem(STUDYSTAT_KEY); if(r){var s=JSON.parse(r);studyStat=s||studyStat;} } catch(e){} }
 function saveStudyStat() { try { localStorage.setItem(STUDYSTAT_KEY, JSON.stringify(studyStat)); } catch(e){} }
 function recordStudy(mod) { // mod: sentence/cctr/essay/review/lg
@@ -122390,7 +122440,7 @@ function recordStudy(mod) { // mod: sentence/cctr/essay/review/lg
   saveStudyStat();
 }
 loadLgSave();
-loadWrong(); loadStudyTime(); loadStudyStat(); updateWrongBadge();
+loadWrong(); loadStudyTime(); loadStudyMod(); loadStudyStat(); updateWrongBadge();
 
 function escHtml(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
 
@@ -122518,6 +122568,30 @@ function fmtDate(ts){
 }
 function renderWrong() {
   updateWrongBadge();
+  // 各板块学习时长概览
+  var wmBox=document.getElementById("wrongModTime");
+  if(wmBox){
+    var wMods=[
+      {key:"cnen", name:"大作文·中译英/80天", color:"#4f46e5"},
+      {key:"cctr", name:"大作文·TR/CC", color:"#9333ea"},
+      {key:"lg",   name:"大作文·L&G改写", color:"#10b981"},
+      {key:"essay",name:"大作文·整篇精批", color:"#f43f5e"},
+      {key:"t1special", name:"小作文·句子综合", color:"#0ea5e9"},
+      {key:"t1essay",   name:"小作文·整篇精批", color:"#06b6d4"}
+    ];
+    var wMax=1; wMods.forEach(function(m){ var v=studyMod[m.key]||0; if(v>wMax)wMax=v; });
+    var wHtml="";
+    wMods.forEach(function(m){
+      var v=studyMod[m.key]||0;
+      var pct=Math.round(v/wMax*100);
+      wHtml+="<div class='flex items-center gap-3'>"
+        +"<div class='w-36 text-xs text-slate-600 flex-shrink-0'>"+m.name+"</div>"
+        +"<div class='flex-1 bg-slate-100 rounded-full h-2 overflow-hidden'><div style='width:"+pct+"%;background:"+m.color+"' class='h-2 rounded-full'></div></div>"
+        +"<div class='w-20 text-right text-xs font-semibold text-slate-700 flex-shrink-0'>"+fmtDuration(v/1000)+"</div>"
+        +"</div>";
+    });
+    wmBox.innerHTML=wHtml;
+  }
   var arr=Object.keys(wrongBook).map(function(k){ return wrongBook[k]; });
   arr=arr.filter(function(r){ if((r.module||"")==="essay") return false; 
     if(wrongFilter==="todo") return !r.repracticed;
@@ -122546,38 +122620,55 @@ function renderWrong() {
       "这里还没有错题。去练习并提交 AI 批改，有错会自动收进来、永久保留。");
     box.innerHTML="<div class='text-center text-slate-400 py-12'>"+tip+"</div>";
   } else {
+    // 区分大小作文：全部视图按「大作文 / 小作文」分组显示
+    var isTask1Mod = function(r){ var mod=r.module||r.cat||""; return mod.indexOf("task1_")===0; };
+    var groups;
+    if (wrongMod==="all") {
+      groups=[
+        {title:"📝 大作文错题", color:"bg-indigo-500", items:arr.filter(function(r){return !isTask1Mod(r);})},
+        {title:"📊 小作文错题", color:"bg-sky-500", items:arr.filter(function(r){return isTask1Mod(r);})}
+      ];
+    } else {
+      groups=[{title:"错题", color:"bg-indigo-500", items:arr}];
+    }
     var html="";
-    arr.forEach(function(r){
-      var did=didOf(r.key);
-      var done=!!r.repracticed;
-      var statusBadge = done
-        ? "<span class='text-[11px] bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full font-medium'>✓ 已重新练习</span>"
-        : "<span class='text-[11px] bg-amber-100 text-amber-700 px-2 py-1 rounded-full font-medium'>● 未重新练习</span>";
-      var tags=(r.errorTypes||[]).map(function(t){ return "<span class='text-[11px] bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full'>"+escHtml(t)+"</span>"; }).join(" ");
-      html+="<div class='bg-white rounded-2xl border "+(done?"border-emerald-200":"border-rose-200")+" shadow-sm p-4 mb-3'>"
-        +"<div class='flex items-center gap-1.5 flex-wrap mb-2'>"+tags+statusBadge
-          +"<span class='ml-auto text-xs text-slate-400'>#"+r.num+"</span></div>"
-        +"<div class='text-[11px] text-slate-400 mb-2'>首次错于 "+fmtDate(r.addedAt)+" · 最近错于 "+fmtDate(r.lastWrongAt)
-          +(done?(" · 重练于 "+fmtDate(r.repracticeAt)):"")+"</div>"
-        +"<div class='text-[15px] font-semibold text-slate-800 mb-2'>中文："+escHtml(r.ch)+"</div>"
-        +"<div class='rounded-lg bg-rose-50 border border-rose-100 p-2.5 mb-2 text-sm text-rose-700'><span class='text-[11px] text-rose-400 block mb-0.5'>✗ 你当时写的</span>"+escHtml(r.userText||"（空）")+"</div>"
-        +"<div class='rounded-lg bg-emerald-50 border border-emerald-100 p-2.5 mb-2 text-sm text-emerald-800'><span class='text-[11px] text-emerald-500 block mb-0.5'>✓ 正确写法</span>"+escHtml(r.en)+"</div>"
-        +"<button type='button' onclick=\"toggleWrongDetail('"+r.key+"')\" class='text-xs text-purple-600 mb-1'>▸ 展开：错误原因 · 怎样写才对 · 语法复习</button>"
-        +"<div id='wd_"+did+"' class='hidden mt-1 text-sm space-y-2 bg-slate-50 rounded-xl p-3'>";
-      if(r.aiAnalysis) html+="<div><span class='text-rose-600 font-semibold text-xs'>① 错误原因（AI 分类讲解）</span><div class='text-slate-700 mt-1'>"+escHtml(r.aiAnalysis).replace(/\n/g,"<br>")+"</div></div>";
-      if(r.howToFix) html+="<div><span class='text-emerald-700 font-semibold text-xs'>② 怎样写才对（三档参考）</span><div class='text-slate-700 mt-1'>"+escHtml(r.howToFix).replace(/\n/g,"<br>")+"</div></div>";
-      if(r.grammar_full) html+="<div><span class='text-purple-700 font-semibold text-xs'>③ 本句结构</span><div class='text-slate-700 mt-1'>"+escHtml(r.grammar_full).replace(/\n/g,"<br>")+"</div></div>";
-      (r.grammar_precise||[]).forEach(function(g){
-        html+="<div class='bg-emerald-50 rounded-lg p-2'><b>"+escHtml(g.type)+"</b>（"+escHtml(g.fragment)+"）<div class='text-slate-600 mt-0.5'>"+escHtml(g.note)+"</div></div>";
+    groups.forEach(function(g){
+      if(!g.items.length) return;
+      html+="<div class='flex items-center gap-2 mb-2 mt-4'>"
+        +"<div class='text-sm font-bold text-white "+g.color+" px-3 py-1 rounded-full'>"+g.title+"</div>"
+        +"<div class='text-xs text-slate-400'>"+g.items.length+" 题</div></div>";
+      g.items.forEach(function(r){
+        var did=didOf(r.key);
+        var done=!!r.repracticed;
+        var statusBadge = done
+          ? "<span class='text-[11px] bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full font-medium'>✓ 已重新练习</span>"
+          : "<span class='text-[11px] bg-amber-100 text-amber-700 px-2 py-1 rounded-full font-medium'>● 未重新练习</span>";
+        var tags=(r.errorTypes||[]).map(function(t){ return "<span class='text-[11px] bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full'>"+escHtml(t)+"</span>"; }).join(" ");
+        html+="<div class='bg-white rounded-2xl border "+(done?"border-emerald-200":"border-rose-200")+" shadow-sm p-4 mb-3'>"
+          +"<div class='flex items-center gap-1.5 flex-wrap mb-2'>"+tags+statusBadge
+            +"<span class='ml-auto text-xs text-slate-400'>#"+r.num+"</span></div>"
+          +"<div class='text-[11px] text-slate-400 mb-2'>首次错于 "+fmtDate(r.addedAt)+" · 最近错于 "+fmtDate(r.lastWrongAt)
+            +(done?(" · 重练于 "+fmtDate(r.repracticeAt)):"")+"</div>"
+          +"<div class='text-[15px] font-semibold text-slate-800 mb-2'>中文："+escHtml(r.ch)+"</div>"
+          +"<div class='rounded-lg bg-rose-50 border border-rose-100 p-2.5 mb-2 text-sm text-rose-700'><span class='text-[11px] text-rose-400 block mb-0.5'>✗ 你当时写的</span>"+escHtml(r.userText||"（空）")+"</div>"
+          +"<div class='rounded-lg bg-emerald-50 border border-emerald-100 p-2.5 mb-2 text-sm text-emerald-800'><span class='text-[11px] text-emerald-500 block mb-0.5'>✓ 正确写法</span>"+escHtml(r.en)+"</div>"
+          +"<button type='button' onclick=\"toggleWrongDetail('"+r.key+"')\" class='text-xs text-purple-600 mb-1'>▸ 展开：错误原因 · 怎样写才对 · 语法复习</button>"
+          +"<div id='wd_"+did+"' class='hidden mt-1 text-sm space-y-2 bg-slate-50 rounded-xl p-3'>";
+        if(r.aiAnalysis) html+="<div><span class='text-rose-600 font-semibold text-xs'>① 错误原因（AI 分类讲解）</span><div class='text-slate-700 mt-1'>"+escHtml(r.aiAnalysis).replace(/\n/g,"<br>")+"</div></div>";
+        if(r.howToFix) html+="<div><span class='text-emerald-700 font-semibold text-xs'>② 怎样写才对（三档参考）</span><div class='text-slate-700 mt-1'>"+escHtml(r.howToFix).replace(/\n/g,"<br>")+"</div></div>";
+        if(r.grammar_full) html+="<div><span class='text-purple-700 font-semibold text-xs'>③ 本句结构</span><div class='text-slate-700 mt-1'>"+escHtml(r.grammar_full).replace(/\n/g,"<br>")+"</div></div>";
+        (r.grammar_precise||[]).forEach(function(g){
+          html+="<div class='bg-emerald-50 rounded-lg p-2'><b>"+escHtml(g.type)+"</b>（"+escHtml(g.fragment)+"）<div class='text-slate-600 mt-0.5'>"+escHtml(g.note)+"</div></div>";
+        });
+        if(!r.aiAnalysis && !r.howToFix && !r.grammar_full && !(r.grammar_precise||[]).length)
+          html+="<div class='text-slate-400 text-xs'>这道题为手动加入，点下方「重新练习」再写一遍即可。</div>";
+        html+="</div>"
+          +"<div class='flex items-center gap-2 mt-3'>"
+            +"<button onclick=\"startRepractice('"+r.key+"')\" class='flex-1 bg-purple-600 hover:bg-purple-700 text-white rounded-lg py-2 text-sm font-medium'>🔄 重新练习这道题</button>"
+            +"<button onclick=\"removeWrong('"+r.key+"')\" class='px-3 text-xs text-slate-400 hover:text-rose-500'>移出错题本</button>"
+          +"</div>"
+          +"</div>";
       });
-      if(!r.aiAnalysis && !r.howToFix && !r.grammar_full && !(r.grammar_precise||[]).length)
-        html+="<div class='text-slate-400 text-xs'>这道题为手动加入，点下方「重新练习」再写一遍即可。</div>";
-      html+="</div>"
-        +"<div class='flex items-center gap-2 mt-3'>"
-          +"<button onclick=\"startRepractice('"+r.key+"')\" class='flex-1 bg-purple-600 hover:bg-purple-700 text-white rounded-lg py-2 text-sm font-medium'>🔄 重新练习这道题</button>"
-          +"<button onclick=\"removeWrong('"+r.key+"')\" class='px-3 text-xs text-slate-400 hover:text-rose-500'>移出错题本</button>"
-        +"</div>"
-        +"</div>";
     });
     box.innerHTML=html;
   }
@@ -122626,19 +122717,37 @@ function fmtDuration(sec){
   if(m>0) return m+"分"+s+"秒";
   return s+"秒";
 }
+function currentStudyMod(){
+  // 返回当前可见训练页对应的板块key；不在训练页返回空
+  var map=[
+    ["trainPage","cnen"],        // 大作文中译英/80天打卡
+    ["cctrPage","cctr"],         // 大作文TR/CC
+    ["lgPage","lg"],             // 大作文L&G
+    ["essayWorkPage","essay"],   // 大作文整篇精批
+    ["task1SpecialPage","t1special"], // 小作文句子训练
+    ["task1WorkPage","t1essay"]  // 小作文整篇精批
+  ];
+  for(var i=0;i<map.length;i++){
+    var el=document.getElementById(map[i][0]);
+    if(el && !el.classList.contains("hidden")) return map[i][1];
+  }
+  return "";
+}
 function tickStudy(){
   var now=Date.now();
-  var tr=document.getElementById("trainPage");
-  var inTrain=tr && !tr.classList.contains("hidden");
   var delta=now-studyTimer.last; studyTimer.last=now;
-  if(inTrain && !document.hidden && delta>0 && delta<3000){
-    var t=todayStr(); studyTime[t]=(studyTime[t]||0)+delta;
+  if(!document.hidden && delta>0 && delta<3000){
+    var mod=currentStudyMod();
+    if(mod){
+      var t=todayStr(); studyTime[t]=(studyTime[t]||0)+delta;
+      studyMod[mod]=(studyMod[mod]||0)+delta;
+    }
   }
 }
 setInterval(tickStudy,1000);
-setInterval(saveStudyTime,5000);
+setInterval(function(){ try{ saveStudyTime(); saveStudyMod(); }catch(e){} },5000);
 document.addEventListener("visibilitychange",function(){ studyTimer.last=Date.now(); });
-window.addEventListener("pagehide",function(){ try{ saveStudyTime(); }catch(e){} });
+window.addEventListener("pagehide",function(){ try{ saveStudyTime(); saveStudyMod(); }catch(e){} });
 function studyStats(){
   if(!studyTime) studyTime={};
   var t=todayStr(), days=0, total=0;
@@ -127044,6 +127153,44 @@ function renderReport(){
   document.getElementById("repCctr").textContent=t.cctr||0;
   document.getElementById("repLg").textContent=t.lg||0;
   document.getElementById("repReview").textContent=t.review||0;
+  // 小作文统计
+  var t1s=JSON.parse(localStorage.getItem("task1_stats")||'{"total":0,"ai":0,"wrong":0}');
+  var t1h=JSON.parse(localStorage.getItem("task1_hist")||"{}");
+  var t1EssayN=0; Object.keys(t1h).forEach(function(k){ if(t1h[k]&&t1h[k].result) t1EssayN++; });
+  document.getElementById("repT1Special").textContent=t1s.total||0;
+  document.getElementById("repT1Essay").textContent=t1EssayN;
+  // 各板块学习时长
+  var modList=[
+    {key:"cnen", name:"中译英 / 80天打卡", color:"#4f46e5", card:"repSentenceTime"},
+    {key:"cctr", name:"TR / CC 构思", color:"#9333ea", card:"repCctrTime"},
+    {key:"lg",   name:"L & G 改写训练", color:"#10b981", card:"repLgTime"},
+    {key:"essay",name:"整篇精批", color:"#f43f5e", card:"repReviewTime"}
+  ];
+  var t1Mods=[
+    {key:"t1special", name:"句子综合训练", color:"#0ea5e9", card:"repT1SpecialTime"},
+    {key:"t1essay",   name:"整篇精批", color:"#06b6d4", card:"repT1EssayTime"}
+  ];
+  var maxMod=1;
+  modList.concat(t1Mods).forEach(function(m){ var v=studyMod[m.key]||0; if(v>maxMod) maxMod=v; });
+  var modBar=function(m){
+    var v=studyMod[m.key]||0;
+    var pct=Math.round(v/maxMod*100);
+    return "<div class='flex items-center gap-3'>"
+      +"<div class='w-32 text-xs text-slate-600 flex-shrink-0'>"+m.name+"</div>"
+      +"<div class='flex-1 bg-slate-100 rounded-full h-2.5 overflow-hidden'><div style='width:"+pct+"%;background:"+m.color+"' class='h-2.5 rounded-full'></div></div>"
+      +"<div class='w-24 text-right text-xs font-semibold text-slate-700 flex-shrink-0'>"+fmtDuration(v/1000)+"</div>"
+      +"</div>";
+  };
+  document.getElementById("repBigMods").innerHTML=modList.map(modBar).join("");
+  document.getElementById("repT1Mods").innerHTML=t1Mods.map(modBar).join("");
+  var bigSum=0,t1Sum=0;
+  modList.forEach(function(m){ bigSum+=(studyMod[m.key]||0); });
+  t1Mods.forEach(function(m){ t1Sum+=(studyMod[m.key]||0); });
+  document.getElementById("repBigSum").textContent="合计 "+fmtDuration(bigSum/1000);
+  document.getElementById("repT1Sum").textContent="合计 "+fmtDuration(t1Sum/1000);
+  // 总览卡片小字
+  modList.forEach(function(m){ var el=document.getElementById(m.card); if(el) el.textContent="学习 "+fmtDuration((studyMod[m.key]||0)/1000); });
+  t1Mods.forEach(function(m){ var el=document.getElementById(m.card); if(el) el.textContent="学习 "+fmtDuration((studyMod[m.key]||0)/1000); });
   // 学习时长和打卡天数
   var ss=studyStats();
   var hours=Math.floor(ss.totalSec/3600);
@@ -128357,13 +128504,13 @@ function task1_specialAddToWrong() {
     cat: mod,
     topic: task1_specialType === "translate" ? "小作文中译英" : "小作文句型",
     num: task1_specialIdx + 1,
-    ch: task1_specialType === "translate" ? item.cn : item.task,
-    en: item.en,
+    ch: item.cn || item.task || "小作文句子训练",
+    en: (item.expressions && item.expressions[0]) ? item.expressions[0].en : (item.en || ""),
     userText: userText,
     errorTypes: [task1_specialType === "translate" ? "小作文中译英" : "小作文句型"],
     aiAnalysis: "",
     howToFix: item.tip || "参考参考答案，注意句型和词汇的准确使用",
-    grammar: item.grammar || "",
+    grammar: item.grammar || (typeof item.grammar_knowledge === "string" ? item.grammar_knowledge : ""),
     addedAt: Date.now(),
     lastWrongAt: Date.now(),
     repracticed: false
@@ -128390,9 +128537,10 @@ function task1_specialShowAnswer() {
   var list = TASK1_SPECIAL[task1_specialType], item = list[task1_specialIdx];
   var result = document.getElementById("task1_specialResult");
   result.classList.remove("hidden");
+  var refEn = (item.expressions && item.expressions[0]) ? item.expressions[0].en : (item.en || "");
   result.innerHTML = '<div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4">' +
     '<div class="font-bold text-emerald-800 mb-2">✅ 参考答案</div>' +
-    '<div class="text-slate-700">' + item.en + '</div>' +
+    '<div class="text-slate-700">' + refEn + '</div>' +
     (item.grammar ? '<div class="mt-2 text-sm text-slate-600"><b>语法点：</b>' + item.grammar + '</div>' : '') + '</div>';
 }
 function task1_specialSubmit() {
@@ -128429,86 +128577,104 @@ function task1_specialSubmit() {
       '<div class="text-sm text-slate-700 font-mono">' + item.highScorePattern + '</div></div>';
   }
   
-  // 精确语法分析
-  if (item.grammar_precise && item.grammar_precise.length) {
+  // 精确语法分析（兼容字符串或对象数组两种数据格式）
+  if (item.grammar_precise && (item.grammar_precise.length || typeof item.grammar_precise === "string")) {
     answerHtml += '<div class="text-xs font-semibold text-emerald-700 mb-2">📐 精确语法分析</div>';
-    item.grammar_precise.forEach(function(g) {
-      answerHtml += '<div class="bg-emerald-50 rounded-lg p-3 mb-2">' +
-        '<div class="flex items-center gap-2 mb-1">' +
-        '<span class="text-xs bg-emerald-200 text-emerald-800 px-2 py-0.5 rounded-full font-medium">' + g.type + '</span></div>' +
-        '<div class="text-sm text-slate-700 mb-1"><span class="text-slate-400">句中片段：</span>' + g.fragment + '</div>' +
-        '<div class="text-xs text-slate-600"><span class="text-emerald-600">说明：</span>' + g.note + '</div></div>';
-    });
-  }
-  
-  // 相关语法知识点
-  if (item.grammar_knowledge && item.grammar_knowledge.length) {
-    answerHtml += '<div class="text-xs font-semibold text-teal-700 mb-2 mt-3">📚 相关语法知识点</div>';
-    item.grammar_knowledge.forEach(function(gk) {
-      answerHtml += '<div class="bg-teal-50 rounded-lg p-3 mb-2">' +
-        '<div class="font-semibold text-teal-800 text-sm mb-1">' + gk.name + '：' + gk.desc + '</div>' +
-        '<div class="text-xs text-slate-600 space-y-1">';
-      gk.points.forEach(function(p) {
-        answerHtml += '<div class="flex gap-1"><span class="text-teal-400">·</span><span>' + p + '</span></div>';
+    if (typeof item.grammar_precise === "string") {
+      answerHtml += '<div class="bg-emerald-50 rounded-lg p-3 mb-2"><div class="text-sm text-slate-700">' + item.grammar_precise + '</div></div>';
+    } else {
+      item.grammar_precise.forEach(function(g) {
+        answerHtml += '<div class="bg-emerald-50 rounded-lg p-3 mb-2">' +
+          '<div class="flex items-center gap-2 mb-1">' +
+          '<span class="text-xs bg-emerald-200 text-emerald-800 px-2 py-0.5 rounded-full font-medium">' + (g.type||"语法点") + '</span></div>' +
+          '<div class="text-sm text-slate-700 mb-1"><span class="text-slate-400">句中片段：</span>' + (g.fragment||"") + '</div>' +
+          '<div class="text-xs text-slate-600"><span class="text-emerald-600">说明：</span>' + (g.note||"") + '</div></div>';
       });
-      answerHtml += '</div></div>';
-    });
+    }
   }
   
-  // 重点短语
+  // 相关语法知识点（兼容字符串或对象数组）
+  if (item.grammar_knowledge && (item.grammar_knowledge.length || typeof item.grammar_knowledge === "string")) {
+    answerHtml += '<div class="text-xs font-semibold text-teal-700 mb-2 mt-3">📚 相关语法知识点</div>';
+    if (typeof item.grammar_knowledge === "string") {
+      answerHtml += '<div class="bg-teal-50 rounded-lg p-3 mb-2"><div class="text-sm text-slate-600">' + item.grammar_knowledge + '</div></div>';
+    } else {
+      item.grammar_knowledge.forEach(function(gk) {
+        answerHtml += '<div class="bg-teal-50 rounded-lg p-3 mb-2">' +
+          '<div class="font-semibold text-teal-800 text-sm mb-1">' + (gk.name||"") + (gk.desc?("：" + gk.desc):"") + '</div>' +
+          '<div class="text-xs text-slate-600 space-y-1">';
+        (gk.points||[]).forEach(function(p) {
+          answerHtml += '<div class="flex gap-1"><span class="text-teal-400">·</span><span>' + p + '</span></div>';
+        });
+        answerHtml += '</div></div>';
+      });
+    }
+  }
+  
+  // 重点短语（兼容字符串数组或对象数组）
   if (item.phrases && item.phrases.length) {
     answerHtml += '<div class="text-xs font-semibold text-cyan-700 mb-2 mt-3">🔗 重点短语</div>';
     item.phrases.forEach(function(p) {
-      answerHtml += '<div class="bg-cyan-50 rounded-lg p-3 mb-2">' +
-        '<div class="flex items-baseline gap-2 flex-wrap mb-2">' +
-        '<span class="font-semibold text-cyan-800">' + p.phrase + '</span>' +
-        '<span class="text-xs text-cyan-600">' + p.mean + '</span></div>' +
-        '<div class="text-sm text-slate-600 mb-1">' + p.eg + '</div>' +
-        '<div class="text-xs text-slate-500">' + p.eg_zh + '</div></div>';
+      if (typeof p === "string") {
+        answerHtml += '<div class="bg-cyan-50 rounded-lg p-3 mb-2"><div class="font-semibold text-cyan-800 text-sm">' + p + '</div></div>';
+      } else {
+        answerHtml += '<div class="bg-cyan-50 rounded-lg p-3 mb-2">' +
+          '<div class="flex items-baseline gap-2 flex-wrap mb-2">' +
+          '<span class="font-semibold text-cyan-800">' + (p.phrase||"") + '</span>' +
+          '<span class="text-xs text-cyan-600">' + (p.mean||"") + '</span></div>' +
+          '<div class="text-sm text-slate-600 mb-1">' + (p.eg||"") + '</div>' +
+          '<div class="text-xs text-slate-500">' + (p.eg_zh||"") + '</div></div>';
+      }
     });
   }
   
-  // 重点单词
+  // 重点单词（兼容字符串数组或对象数组）
   if (item.words && item.words.length) {
     answerHtml += '<div class="text-xs font-semibold text-orange-600 mb-2 mt-3">🔤 重点单词</div>';
     item.words.forEach(function(w) {
-      answerHtml += '<div class="bg-slate-50 rounded-lg p-3 mb-2">' +
-        '<div class="flex items-baseline gap-2 mb-2">' +
-        '<span class="font-semibold text-slate-800">' + w.word + '</span>' +
-        '<span class="text-xs text-slate-500">' + w.mean + '</span></div>' +
-        '<div class="text-sm text-slate-600 mb-1">' + w.eg + '</div>' +
-        '<div class="text-xs text-slate-500">' + w.eg_zh + '</div></div>';
+      if (typeof w === "string") {
+        answerHtml += '<div class="bg-slate-50 rounded-lg p-3 mb-2"><div class="font-semibold text-slate-800 text-sm">' + w + '</div></div>';
+      } else {
+        answerHtml += '<div class="bg-slate-50 rounded-lg p-3 mb-2">' +
+          '<div class="flex items-baseline gap-2 mb-2">' +
+          '<span class="font-semibold text-slate-800">' + (w.word||"") + '</span>' +
+          '<span class="text-xs text-slate-500">' + (w.mean||"") + '</span></div>' +
+          '<div class="text-sm text-slate-600 mb-1">' + (w.eg||"") + '</div>' +
+          '<div class="text-xs text-slate-500">' + (w.eg_zh||"") + '</div></div>';
+      }
     });
   }
   
-  // 同义替换
+  // 同义替换（兼容字符串数组或对象数组）
   if (item.synonyms && item.synonyms.length) {
     answerHtml += '<div class="text-xs font-semibold text-pink-600 mb-2 mt-3">🔄 同义替换 · 高分表达</div>';
     item.synonyms.forEach(function(s) {
-      if (s.type === "句式升级") {
+      if (typeof s === "string") {
+        answerHtml += '<div class="bg-pink-50 rounded-lg p-3 mb-2"><div class="font-medium text-pink-700 text-sm">' + s + '</div></div>';
+      } else if (s.type === "句式升级") {
         answerHtml += '<div class="bg-pink-50 rounded-lg p-3 mb-2">' +
           '<span class="text-xs bg-pink-200 text-pink-800 px-2 py-0.5 rounded-full font-medium">' + s.type + '</span>' +
           '<div class="text-sm text-slate-700 mt-2 space-y-1">';
-        s.replacements.forEach(function(r) {
+        (s.replacements||[]).forEach(function(r) {
           answerHtml += '<div class="flex gap-1"><span class="text-pink-400">·</span><span>' + r + '</span></div>';
         });
         answerHtml += '</div></div>';
       } else {
         answerHtml += '<div class="bg-slate-50 rounded-lg p-3 mb-2">' +
           '<div class="flex items-center gap-2 mb-2 flex-wrap">' +
-          '<span class="text-xs bg-purple-200 text-purple-800 px-2 py-0.5 rounded-full font-medium">' + s.type + '</span>' +
-          '<span class="font-semibold text-slate-800">' + s.original + '</span>' +
+          '<span class="text-xs bg-purple-200 text-purple-800 px-2 py-0.5 rounded-full font-medium">' + (s.type||"替换") + '</span>' +
+          '<span class="font-semibold text-slate-800">' + (s.original||"") + '</span>' +
           '<span class="text-slate-400 text-xs">→</span></div>' +
           '<div class="space-y-2">';
-        s.replacements.forEach(function(r) {
-          var word = typeof r === "string" ? r : r.word;
+        (s.replacements||[]).forEach(function(r) {
+          var word = typeof r === "string" ? r : (r.word||"");
           var examples = (typeof r === "object" && r.examples) ? r.examples : [];
           answerHtml += '<div class="bg-white rounded p-2 border border-slate-200">' +
             '<div class="font-medium text-purple-700 text-sm mb-1">' + word + '</div>';
           if (examples.length > 0) {
             examples.forEach(function(egObj) {
-              var egEn = typeof egObj === "string" ? egObj : egObj.en;
-              var egZh = typeof egObj === "object" ? egObj.zh : "";
+              var egEn = typeof egObj === "string" ? egObj : (egObj.en||"");
+              var egZh = typeof egObj === "object" ? (egObj.zh||"") : "";
               answerHtml += '<div class="text-xs text-slate-600 mb-1">' + egEn + '</div>' +
                 '<div class="text-xs text-slate-400">' + egZh + '</div>';
             });
