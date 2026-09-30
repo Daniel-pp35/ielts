@@ -121268,12 +121268,12 @@ function essayMd(t){
       var L=ln.trim();
       if(!L){flush();closeSnt();closeList();h+="<div class='es-para-gap'></div>";return;} // 空行分段
       var isQ=/^原句[:：]\s?/.test(L),isF=/^(改成|修改后|改为|正确)[:：]?\s?/.test(L),isZ=/^中文[:：]\s?/.test(L);
-      var m=L.match(/^[-•·]\s+(.*)$/),num=L.match(/^\d+[.、)]\s+(.*)$/);
+      var m=L.match(/^[-•·]\s+(.*)$/),num=L.match(/^\d+[.、)]\s+(.*)$/),prob=L.match(/^(问题|错误|建议|原因|改进|注意|要点)\s*[\d一二三四五六七八九十]+\s*[、.:：]\s*(.*)$/);
       if(isQ){closeSnt();closeList();openSnt();cur="quote";buf=[inline(L.replace(/^原句[:：]\s?/,""))];return;}
       if(isF){flush();cur="fix";buf=[inline(L.replace(/^(改成|修改后|改为|正确)[:：]?\s?/,""))];return;}
       if(isZ){flush();cur="zh";buf=[inline(L.replace(/^中文[:：]\s?/,""))];return;}
-      if(m||num){closeSnt();
-        var tag=m?m[1]:num[1],dec=m?"list-disc":"list-decimal";
+      if(m||num||prob){closeSnt();
+        var tag=m?m[1]:(num?num[1]:(prob?L.replace(/^讲解[:：]\s?/,""):"")),dec=m?"list-disc":"list-decimal";
         if(!inList){h+="<ul class='"+dec+" pl-5 my-2 space-y-1.5 text-slate-700'>";inList=true;}
         h+="<li>"+inline(tag)+"</li>";return;}
       if(cur==="quote"||cur==="fix"){ // 纯英文续行并入；出现中文则转讲解
@@ -121387,12 +121387,12 @@ function essayMdForDoc(t){
       var L=ln.trim();
       if(!L){flush();closeSnt();closeList();h+="<div style='height:8px'></div>";return;} // 空行分段
       var isQ=/^原句[:：]\s?/.test(L),isF=/^(改成|修改后|改为|正确)[:：]?\s?/.test(L),isZ=/^中文[:：]\s?/.test(L);
-      var m=L.match(/^[-•·]\s+(.*)$/),num=L.match(/^\d+[.、)]\s+(.*)$/);
+      var m=L.match(/^[-•·]\s+(.*)$/),num=L.match(/^\d+[.、)]\s+(.*)$/),prob=L.match(/^(问题|错误|建议|原因|改进|注意|要点)\s*[\d一二三四五六七八九十]+\s*[、.:：]\s*(.*)$/);
       if(isQ){closeSnt();closeList();openSnt();cur="quote";buf=[inline(L.replace(/^原句[:：]\s?/,""))];return;}
       if(isF){flush();cur="fix";buf=[inline(L.replace(/^(改成|修改后|改为|正确)[:：]?\s?/,""))];return;}
       if(isZ){flush();cur="zh";buf=[inline(L.replace(/^中文[:：]\s?/,""))];return;}
-      if(m||num){closeSnt();
-        var tag=m?m[1]:num[1];
+      if(m||num||prob){closeSnt();
+        var tag=m?m[1]:(num?num[1]:(prob?L.replace(/^讲解[:：]\s?/,""):""));
         if(!inList){h+="<ul style='margin:6px 0;padding-left:22px;line-height:1.7'>";inList=true;}
         h+="<li style='"+LI_STYLE+"'>"+inline(tag)+"</li>";return;}
       if(cur==="quote"||cur==="fix"){
