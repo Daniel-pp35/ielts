@@ -129025,9 +129025,41 @@ function task1_updateStats() {
   <div class="flex items-center justify-between mb-6">
     <button onclick="task1_backToHome()" class="text-slate-500 hover:text-slate-800 text-sm">← 首页</button>
     <h2 class="font-bold text-lg text-slate-800">小作文 Task 1</h2>
-    <div class="flex items-center gap-2">
-      <a href="https://www.kufaka.com/item/43573v" target="_blank" rel="noopener" class="text-xs bg-gradient-to-r from-purple-600 to-pink-500 text-white px-3 py-1.5 rounded-lg font-semibold hover:opacity-90">🛒 永久解锁 ¥19.9</a>
-      <button onclick="openCardModal()" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 px-3 py-1.5 rounded-lg font-semibold border border-purple-200">🎫 卡密激活</button>
+    <button onclick="openCardModal()" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 px-3 py-1.5 rounded-lg font-semibold border border-purple-200">🎫 卡密激活</button>
+  </div>
+  <!-- 精批套餐展示 -->
+  <div class="mb-5">
+    <div class="flex items-center justify-between mb-2">
+      <b class="text-sm text-slate-700">精批套餐（按篇扣减，越多越划算）</b>
+      <span class="text-xs text-slate-400">对标人工精批 · 包售后</span>
+    </div>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
+      <a href="https://www.kufaka.com/item/6isrfy" target="_blank" class="bg-white rounded-lg p-3 text-center border border-slate-200 hover:border-purple-300 hover:shadow-sm transition">
+        <div class="text-xs text-slate-500">1篇</div>
+        <div class="text-base font-bold text-purple-600">¥2.99</div>
+        <div class="text-xs text-slate-400">合2.99/篇</div>
+      </a>
+      <a href="https://www.kufaka.com/item/30isk8" target="_blank" class="bg-white rounded-lg p-3 text-center border border-slate-200 hover:border-purple-300 hover:shadow-sm transition">
+        <div class="text-xs text-slate-500">3篇</div>
+        <div class="text-base font-bold text-purple-600">¥6.99</div>
+        <div class="text-xs text-slate-400">合2.33/篇</div>
+      </a>
+      <a href="https://www.kufaka.com/item/w5eat8" target="_blank" class="bg-white rounded-lg p-3 text-center border-2 border-purple-400 hover:shadow-sm transition relative">
+        <div class="absolute -top-2 left-1/2 -translate-x-1/2 bg-purple-600 text-white text-[10px] px-1.5 py-0.5 rounded-full">推荐</div>
+        <div class="text-xs text-slate-500">5篇</div>
+        <div class="text-base font-bold text-purple-600">¥9.99</div>
+        <div class="text-xs text-slate-400">合2.00/篇</div>
+      </a>
+      <a href="https://www.kufaka.com/item/jea3hy" target="_blank" class="bg-white rounded-lg p-3 text-center border border-slate-200 hover:border-purple-300 hover:shadow-sm transition">
+        <div class="text-xs text-slate-500">10篇</div>
+        <div class="text-base font-bold text-purple-600">¥18.99</div>
+        <div class="text-xs text-slate-400">合1.90/篇</div>
+      </a>
+      <a href="https://www.kufaka.com/item/fffbru" target="_blank" class="bg-white rounded-lg p-3 text-center border border-slate-200 hover:border-purple-300 hover:shadow-sm transition">
+        <div class="text-xs text-slate-500">30篇</div>
+        <div class="text-base font-bold text-purple-600">¥49.99</div>
+        <div class="text-xs text-slate-400">合1.67/篇</div>
+      </a>
     </div>
   </div>
   <div class="text-sm font-semibold text-slate-500 mb-3">按题型练习</div>
@@ -129051,6 +129083,9 @@ function task1_updateStats() {
       <div class="text-3xl mb-2">🗺️</div><div class="font-bold text-slate-800">地图</div><div class="text-xs text-slate-500 mt-1">Map</div>
     </button>
   </div>
+  <div class="flex justify-end mb-3">
+    <a href="https://www.kufaka.com/item/43573v" target="_blank" rel="noopener" class="text-xs bg-gradient-to-r from-purple-600 to-pink-500 text-white px-3 py-1.5 rounded-lg font-semibold hover:opacity-90">🛒 永久解锁 ¥19.9</a>
+  </div>
   <div class="text-sm font-semibold text-slate-500 mb-3">专项训练</div>
   <div class="mb-6">
     <button onclick="task1_enterSpecial('combined')" class="w-full bg-gradient-to-br from-purple-500 to-pink-500 text-white rounded-xl p-5 hover:shadow-lg transition text-left">
@@ -129073,45 +129108,7 @@ function task1_updateStats() {
   <div class="flex items-center justify-between mb-6">
     <button onclick="task1_backToHomePage()" class="text-slate-500 hover:text-slate-800 text-sm">← 返回</button>
     <h2 class="font-bold text-lg text-slate-800" id="task1_typeTitle">题型</h2>
-    <div class="flex items-center gap-2">
-      <a href="https://www.kufaka.com/item/w5eat8" target="_blank" rel="noopener" class="text-xs bg-gradient-to-r from-purple-600 to-pink-500 text-white px-3 py-1.5 rounded-lg font-semibold hover:opacity-90">🛒 购买精批次数</a>
-      <button onclick="openCardModal()" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 px-3 py-1.5 rounded-lg font-semibold border border-purple-200">🎫 卡密激活</button>
-    </div>
-  </div>
-  <!-- 精批套餐展示 -->
-  <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-4 mb-5 border border-purple-200">
-    <div class="flex justify-between items-center mb-3">
-      <div class="font-bold text-purple-800 text-sm">精批套餐（按篇扣减，越多越划算）</div>
-      <div class="text-xs text-purple-500">对标人工精批 · 包售后</div>
-    </div>
-    <div class="grid grid-cols-2 md:grid-cols-5 gap-2">
-      <a href="https://www.kufaka.com/item/6isrfy" target="_blank" class="bg-white rounded-lg p-3 text-center border border-purple-100 hover:border-purple-300">
-        <div class="text-xs text-slate-600">1篇</div>
-        <div class="text-base font-bold text-purple-600">¥2.99</div>
-        <div class="bg-purple-600 text-white text-xs py-1 rounded mt-1">购买</div>
-      </a>
-      <a href="https://www.kufaka.com/item/30isk8" target="_blank" class="bg-white rounded-lg p-3 text-center border border-purple-100 hover:border-purple-300">
-        <div class="text-xs text-slate-600">3篇</div>
-        <div class="text-base font-bold text-purple-600">¥6.99</div>
-        <div class="bg-purple-600 text-white text-xs py-1 rounded mt-1">购买</div>
-      </a>
-      <a href="https://www.kufaka.com/item/w5eat8" target="_blank" class="bg-white rounded-lg p-3 text-center border-2 border-purple-400 relative">
-        <div class="absolute -top-2 left-1/2 -translate-x-1/2 bg-purple-600 text-white text-[10px] px-1.5 py-0.5 rounded-full">推荐</div>
-        <div class="text-xs text-slate-600">5篇</div>
-        <div class="text-base font-bold text-purple-600">¥9.99</div>
-        <div class="bg-purple-600 text-white text-xs py-1 rounded mt-1">购买</div>
-      </a>
-      <a href="https://www.kufaka.com/item/jea3hy" target="_blank" class="bg-white rounded-lg p-3 text-center border border-purple-100 hover:border-purple-300">
-        <div class="text-xs text-slate-600">10篇</div>
-        <div class="text-base font-bold text-purple-600">¥18.99</div>
-        <div class="bg-purple-600 text-white text-xs py-1 rounded mt-1">购买</div>
-      </a>
-      <a href="https://www.kufaka.com/item/fffbru" target="_blank" class="bg-white rounded-lg p-3 text-center border border-purple-100 hover:border-purple-300">
-        <div class="text-xs text-slate-600">30篇</div>
-        <div class="text-base font-bold text-purple-600">¥49.99</div>
-        <div class="bg-purple-600 text-white text-xs py-1 rounded mt-1">购买</div>
-      </a>
-    </div>
+    <button onclick="openCardModal()" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 px-3 py-1.5 rounded-lg font-semibold border border-purple-200">🎫 卡密激活</button>
   </div>
   <div id="task1_questionList" class="space-y-3"></div>
 </div>
@@ -129121,16 +129118,13 @@ function task1_updateStats() {
   <div class="flex items-center justify-between mb-5">
     <button onclick="task1_backToTypePage()" class="text-slate-500 hover:text-slate-800 text-sm">← 选题</button>
     <h2 class="font-bold text-lg text-slate-800">小作文写作工作台</h2>
-    <div class="flex items-center gap-2">
-      <a href="https://www.kufaka.com/item/w5eat8" target="_blank" rel="noopener" class="text-xs bg-gradient-to-r from-purple-600 to-pink-500 text-white px-3 py-1.5 rounded-lg font-semibold hover:opacity-90">🛒 购买精批次数</a>
-      <button onclick="openCardModal()" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 px-3 py-1.5 rounded-lg font-semibold border border-purple-200">🎫 卡密激活</button>
-    </div>
+    <button onclick="openCardModal()" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 px-3 py-1.5 rounded-lg font-semibold border border-purple-200">🎫 卡密激活</button>
   </div>
   <div class="bg-slate-800 text-white rounded-xl p-5 mb-4">
     <div class="flex items-center gap-2 mb-2 flex-wrap">
       <span class="text-xs font-bold px-2 py-0.5 rounded bg-blue-500/30 text-blue-200" id="task1_qType"></span>
       <span class="text-xs text-slate-400">建议20分钟 · 150字以上</span>
-      <span class="text-xs text-slate-400 ml-auto">精批剩余: <span id="task1_credit" class="text-emerald-400 font-bold">-</span> <a href="https://www.kufaka.com/item/w5eat8" target="_blank" rel="noopener" class="ml-2 text-xs bg-gradient-to-r from-purple-600 to-pink-500 text-white px-2 py-0.5 rounded hover:opacity-90">购买精批</a></span>
+      <span class="text-xs text-slate-400 ml-auto">精批剩余: <span id="task1_credit" class="text-emerald-400 font-bold">-</span></span>
     </div>
     <p class="text-sm leading-relaxed" id="task1_qTitle"></p>
     <div class="mt-4 bg-white rounded-lg p-3" id="task1_chart"></div>
