@@ -435,6 +435,47 @@
     <button onclick="essayPrintView()" class="bg-slate-600 hover:bg-slate-700 text-white text-sm font-semibold px-5 py-3 rounded-xl">🖨 打印/存PDF</button>
     <span class="text-sm text-slate-500" id="ewCredit"></span>
   </div>
+
+  <!-- 精批套餐（次数不够时显示） -->
+  <div id="ewPackage" class="hidden mb-5 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-5 border border-purple-200">
+    <div class="flex justify-between items-center mb-3">
+      <div class="font-bold text-purple-800">精批套餐（按篇扣减，越多越划算）</div>
+      <div class="text-xs text-purple-500">对标人工精批 · 包售后</div>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+      <a href="https://www.kufaka.com/item/6isrfy" target="_blank" class="bg-white rounded-xl p-4 text-center border border-purple-100 hover:border-purple-300 hover:shadow-md transition">
+        <div class="text-sm text-slate-600">1 篇</div>
+        <div class="text-xl font-bold text-purple-600 my-1">¥2.99</div>
+        <div class="text-xs text-slate-400 mb-2">合 2.99 元/篇</div>
+        <div class="bg-purple-600 text-white text-sm py-1.5 rounded-lg">购买</div>
+      </a>
+      <a href="https://www.kufaka.com/item/30isk8" target="_blank" class="bg-white rounded-xl p-4 text-center border border-purple-100 hover:border-purple-300 hover:shadow-md transition">
+        <div class="text-sm text-slate-600">3 篇</div>
+        <div class="text-xl font-bold text-purple-600 my-1">¥6.99</div>
+        <div class="text-xs text-slate-400 mb-2">合 2.33 元/篇</div>
+        <div class="bg-purple-600 text-white text-sm py-1.5 rounded-lg">购买</div>
+      </a>
+      <a href="https://www.kufaka.com/item/w5eat8" target="_blank" class="bg-white rounded-xl p-4 text-center border-2 border-purple-400 hover:shadow-md transition relative">
+        <div class="absolute -top-2 left-1/2 -translate-x-1/2 bg-purple-600 text-white text-xs px-2 py-0.5 rounded-full">推荐</div>
+        <div class="text-sm text-slate-600">5 篇</div>
+        <div class="text-xl font-bold text-purple-600 my-1">¥9.99</div>
+        <div class="text-xs text-slate-400 mb-2">合 2.00 元/篇</div>
+        <div class="bg-purple-600 text-white text-sm py-1.5 rounded-lg">购买</div>
+      </a>
+      <a href="https://www.kufaka.com/item/jea3hy" target="_blank" class="bg-white rounded-xl p-4 text-center border border-purple-100 hover:border-purple-300 hover:shadow-md transition">
+        <div class="text-sm text-slate-600">10 篇</div>
+        <div class="text-xl font-bold text-purple-600 my-1">¥18.99</div>
+        <div class="text-xs text-slate-400 mb-2">合 1.90 元/篇</div>
+        <div class="bg-purple-600 text-white text-sm py-1.5 rounded-lg">购买</div>
+      </a>
+      <a href="https://www.kufaka.com/item/fffbru" target="_blank" class="bg-white rounded-xl p-4 text-center border border-purple-100 hover:border-purple-300 hover:shadow-md transition">
+        <div class="text-sm text-slate-600">30 篇</div>
+        <div class="text-xl font-bold text-purple-600 my-1">¥49.99</div>
+        <div class="text-xs text-slate-400 mb-2">合 1.67 元/篇</div>
+        <div class="bg-purple-600 text-white text-sm py-1.5 rounded-lg">购买</div>
+      </a>
+    </div>
+  </div>
   <div id="ewLoading" class="hidden text-sm text-slate-500 mb-3">AI 正在逐句批改并生成定制范文，整篇内容较多，约需 15~30 秒…</div>
   <div id="ewResult"></div>
 </div>
@@ -121356,8 +121397,12 @@ function essaySubmit(){
   }).then(function(r){return r.json();}).then(function(d){
     document.getElementById("ewLoading").classList.add("hidden");
     if(!d.ok){
-      document.getElementById("ewResult").innerHTML="<div class='text-rose-600 bg-rose-50 rounded-lg p-3 text-sm'>"+(d.msg||"精批失败")+"</div>"
-        +(authToken?"<button onclick='openAccount()' class='mt-2 bg-purple-600 text-white px-3 py-1 rounded text-sm'>账号中心购买次数</button>":"");
+      var errHtml="<div class='text-rose-600 bg-rose-50 rounded-lg p-3 text-sm'>"+(d.msg||"精批失败")+"</div>";
+      if(d.code==="NO_CREDITS"){
+        document.getElementById("ewPackage").classList.remove("hidden");
+        errHtml+="<div class='mt-2 text-sm text-purple-700'>💡 你的作文已自动保存，购买后回来直接点「AI精批整篇」即可。</div>";
+      }
+      document.getElementById("ewResult").innerHTML=errHtml;
       if(d.code==="BAD_CARD"||d.code==="REVOKED"){ setEssayCard(null); essayRefreshCredit(); }
       if(d.code==="AUTH_EXPIRED"){ setAuthToken(""); _authUser=null; updateAuthUI(); }
       return;
@@ -128432,7 +128477,12 @@ function task1_submit() {
     method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(essayBody)
   }).then(function(r) { return r.json(); }).then(function(d) {
     if (!d.ok) {
-      document.getElementById("task1_result").innerHTML = '<div class="text-rose-600 bg-rose-50 rounded-lg p-4">' + (d.msg || "精批失败，请重试") + '</div>';
+      var errHtml = '<div class="text-rose-600 bg-rose-50 rounded-lg p-4">' + (d.msg || "精批失败，请重试") + '</div>';
+      if (d.code === "NO_CREDITS") {
+        document.getElementById("task1Package").classList.remove("hidden");
+        errHtml += '<div class="mt-2 text-sm text-purple-700">💡 你的作文已自动保存，购买后回来直接点「AI精批整篇」即可。</div>';
+      }
+      document.getElementById("task1_result").innerHTML = errHtml;
       if (d.code === "BAD_CARD" || d.code === "REVOKED") { setEssayCard(null); }
       if (d.code === "AUTH_EXPIRED") { setAuthToken(""); _authUser = null; updateAuthUI(); }
       return;
@@ -129024,8 +129074,43 @@ function task1_updateStats() {
     <button onclick="task1_backToHomePage()" class="text-slate-500 hover:text-slate-800 text-sm">← 返回</button>
     <h2 class="font-bold text-lg text-slate-800" id="task1_typeTitle">题型</h2>
     <div class="flex items-center gap-2">
-      <a href="https://www.kufaka.com/item/43573v" target="_blank" rel="noopener" class="text-xs bg-gradient-to-r from-purple-600 to-pink-500 text-white px-3 py-1.5 rounded-lg font-semibold hover:opacity-90">🛒 永久解锁 ¥19.9</a>
+      <a href="https://www.kufaka.com/item/w5eat8" target="_blank" rel="noopener" class="text-xs bg-gradient-to-r from-purple-600 to-pink-500 text-white px-3 py-1.5 rounded-lg font-semibold hover:opacity-90">🛒 购买精批次数</a>
       <button onclick="openCardModal()" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 px-3 py-1.5 rounded-lg font-semibold border border-purple-200">🎫 卡密激活</button>
+    </div>
+  </div>
+  <!-- 精批套餐展示 -->
+  <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-4 mb-5 border border-purple-200">
+    <div class="flex justify-between items-center mb-3">
+      <div class="font-bold text-purple-800 text-sm">精批套餐（按篇扣减，越多越划算）</div>
+      <div class="text-xs text-purple-500">对标人工精批 · 包售后</div>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-2">
+      <a href="https://www.kufaka.com/item/6isrfy" target="_blank" class="bg-white rounded-lg p-3 text-center border border-purple-100 hover:border-purple-300">
+        <div class="text-xs text-slate-600">1篇</div>
+        <div class="text-base font-bold text-purple-600">¥2.99</div>
+        <div class="bg-purple-600 text-white text-xs py-1 rounded mt-1">购买</div>
+      </a>
+      <a href="https://www.kufaka.com/item/30isk8" target="_blank" class="bg-white rounded-lg p-3 text-center border border-purple-100 hover:border-purple-300">
+        <div class="text-xs text-slate-600">3篇</div>
+        <div class="text-base font-bold text-purple-600">¥6.99</div>
+        <div class="bg-purple-600 text-white text-xs py-1 rounded mt-1">购买</div>
+      </a>
+      <a href="https://www.kufaka.com/item/w5eat8" target="_blank" class="bg-white rounded-lg p-3 text-center border-2 border-purple-400 relative">
+        <div class="absolute -top-2 left-1/2 -translate-x-1/2 bg-purple-600 text-white text-[10px] px-1.5 py-0.5 rounded-full">推荐</div>
+        <div class="text-xs text-slate-600">5篇</div>
+        <div class="text-base font-bold text-purple-600">¥9.99</div>
+        <div class="bg-purple-600 text-white text-xs py-1 rounded mt-1">购买</div>
+      </a>
+      <a href="https://www.kufaka.com/item/jea3hy" target="_blank" class="bg-white rounded-lg p-3 text-center border border-purple-100 hover:border-purple-300">
+        <div class="text-xs text-slate-600">10篇</div>
+        <div class="text-base font-bold text-purple-600">¥18.99</div>
+        <div class="bg-purple-600 text-white text-xs py-1 rounded mt-1">购买</div>
+      </a>
+      <a href="https://www.kufaka.com/item/fffbru" target="_blank" class="bg-white rounded-lg p-3 text-center border border-purple-100 hover:border-purple-300">
+        <div class="text-xs text-slate-600">30篇</div>
+        <div class="text-base font-bold text-purple-600">¥49.99</div>
+        <div class="bg-purple-600 text-white text-xs py-1 rounded mt-1">购买</div>
+      </a>
     </div>
   </div>
   <div id="task1_questionList" class="space-y-3"></div>
@@ -129037,7 +129122,7 @@ function task1_updateStats() {
     <button onclick="task1_backToTypePage()" class="text-slate-500 hover:text-slate-800 text-sm">← 选题</button>
     <h2 class="font-bold text-lg text-slate-800">小作文写作工作台</h2>
     <div class="flex items-center gap-2">
-      <a href="https://www.kufaka.com/item/43573v" target="_blank" rel="noopener" class="text-xs bg-gradient-to-r from-purple-600 to-pink-500 text-white px-3 py-1.5 rounded-lg font-semibold hover:opacity-90">🛒 永久解锁 ¥19.9</a>
+      <a href="https://www.kufaka.com/item/w5eat8" target="_blank" rel="noopener" class="text-xs bg-gradient-to-r from-purple-600 to-pink-500 text-white px-3 py-1.5 rounded-lg font-semibold hover:opacity-90">🛒 购买精批次数</a>
       <button onclick="openCardModal()" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 px-3 py-1.5 rounded-lg font-semibold border border-purple-200">🎫 卡密激活</button>
     </div>
   </div>
@@ -129045,7 +129130,7 @@ function task1_updateStats() {
     <div class="flex items-center gap-2 mb-2 flex-wrap">
       <span class="text-xs font-bold px-2 py-0.5 rounded bg-blue-500/30 text-blue-200" id="task1_qType"></span>
       <span class="text-xs text-slate-400">建议20分钟 · 150字以上</span>
-      <span class="text-xs text-slate-400 ml-auto">精批剩余: <span id="task1_credit" class="text-emerald-400 font-bold">-</span></span>
+      <span class="text-xs text-slate-400 ml-auto">精批剩余: <span id="task1_credit" class="text-emerald-400 font-bold">-</span> <a href="https://www.kufaka.com/item/w5eat8" target="_blank" rel="noopener" class="ml-2 text-xs bg-gradient-to-r from-purple-600 to-pink-500 text-white px-2 py-0.5 rounded hover:opacity-90">购买精批</a></span>
     </div>
     <p class="text-sm leading-relaxed" id="task1_qTitle"></p>
     <div class="mt-4 bg-white rounded-lg p-3" id="task1_chart"></div>
@@ -129078,6 +129163,47 @@ function task1_updateStats() {
     <button onclick="task1_submit()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg text-sm font-medium">🤖 AI精批整篇（扣次数）</button>
     <button onclick="task1_addToWrong()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 px-4 py-2 rounded-lg text-sm border border-rose-200">❌ 加入错题本</button>
     <button onclick="task1_exportWord()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-lg text-sm">📥 导出Word</button>
+  </div>
+
+  <!-- 精批套餐（次数不够时显示） -->
+  <div id="task1Package" class="hidden mb-6 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-5 border border-purple-200">
+    <div class="flex justify-between items-center mb-3">
+      <div class="font-bold text-purple-800">精批套餐（按篇扣减，越多越划算）</div>
+      <div class="text-xs text-purple-500">对标人工精批 · 包售后</div>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+      <a href="https://www.kufaka.com/item/6isrfy" target="_blank" class="bg-white rounded-xl p-4 text-center border border-purple-100 hover:border-purple-300 hover:shadow-md transition">
+        <div class="text-sm text-slate-600">1 篇</div>
+        <div class="text-xl font-bold text-purple-600 my-1">¥2.99</div>
+        <div class="text-xs text-slate-400 mb-2">合 2.99 元/篇</div>
+        <div class="bg-purple-600 text-white text-sm py-1.5 rounded-lg">购买</div>
+      </a>
+      <a href="https://www.kufaka.com/item/30isk8" target="_blank" class="bg-white rounded-xl p-4 text-center border border-purple-100 hover:border-purple-300 hover:shadow-md transition">
+        <div class="text-sm text-slate-600">3 篇</div>
+        <div class="text-xl font-bold text-purple-600 my-1">¥6.99</div>
+        <div class="text-xs text-slate-400 mb-2">合 2.33 元/篇</div>
+        <div class="bg-purple-600 text-white text-sm py-1.5 rounded-lg">购买</div>
+      </a>
+      <a href="https://www.kufaka.com/item/w5eat8" target="_blank" class="bg-white rounded-xl p-4 text-center border-2 border-purple-400 hover:shadow-md transition relative">
+        <div class="absolute -top-2 left-1/2 -translate-x-1/2 bg-purple-600 text-white text-xs px-2 py-0.5 rounded-full">推荐</div>
+        <div class="text-sm text-slate-600">5 篇</div>
+        <div class="text-xl font-bold text-purple-600 my-1">¥9.99</div>
+        <div class="text-xs text-slate-400 mb-2">合 2.00 元/篇</div>
+        <div class="bg-purple-600 text-white text-sm py-1.5 rounded-lg">购买</div>
+      </a>
+      <a href="https://www.kufaka.com/item/jea3hy" target="_blank" class="bg-white rounded-xl p-4 text-center border border-purple-100 hover:border-purple-300 hover:shadow-md transition">
+        <div class="text-sm text-slate-600">10 篇</div>
+        <div class="text-xl font-bold text-purple-600 my-1">¥18.99</div>
+        <div class="text-xs text-slate-400 mb-2">合 1.90 元/篇</div>
+        <div class="bg-purple-600 text-white text-sm py-1.5 rounded-lg">购买</div>
+      </a>
+      <a href="https://www.kufaka.com/item/fffbru" target="_blank" class="bg-white rounded-xl p-4 text-center border border-purple-100 hover:border-purple-300 hover:shadow-md transition">
+        <div class="text-sm text-slate-600">30 篇</div>
+        <div class="text-xl font-bold text-purple-600 my-1">¥49.99</div>
+        <div class="text-xs text-slate-400 mb-2">合 1.67 元/篇</div>
+        <div class="bg-purple-600 text-white text-sm py-1.5 rounded-lg">购买</div>
+      </a>
+    </div>
   </div>
   
   <div id="task1_result" class="hidden"></div>
