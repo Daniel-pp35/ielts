@@ -748,6 +748,16 @@
       <div class="flex justify-between"><span class="text-slate-500">套餐</span><span class="font-medium" id="accPlan">-</span></div>
       <div class="flex justify-between"><span class="text-slate-500">试用到期</span><span class="font-medium" id="accTrial">-</span></div>
       <div class="flex justify-between"><span class="text-slate-500">精批剩余</span><span class="font-medium text-purple-600" id="accCredits">-</span></div>
+      <div class="flex justify-between"><span class="text-slate-500">AI句子批改剩余</span><span class="font-medium text-teal-600" id="accAiCredits">-</span></div>
+    </div>
+    <div id="accVerifyBox" class="hidden mb-4 bg-amber-50 border border-amber-200 rounded-xl p-3">
+      <div class="text-xs font-semibold text-amber-800 mb-2">📧 验证邮箱可把 AI 句子批改次数从 10 次升到 20 次</div>
+      <div class="flex gap-2">
+        <input id="accVcode" type="text" placeholder="6位验证码" maxlength="6" class="flex-1 border border-amber-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-300">
+        <button onclick="accSendCode()" class="bg-amber-500 hover:bg-amber-600 text-white px-3 rounded-lg text-xs font-medium shrink-0">发送验证码</button>
+        <button onclick="accVerifyCode()" class="bg-teal-600 hover:bg-teal-700 text-white px-3 rounded-lg text-xs font-medium shrink-0">验证</button>
+      </div>
+      <p id="accVerifyMsg" class="text-xs mt-1 text-amber-700"></p>
     </div>
     <div class="mb-4">
       <label class="text-xs text-slate-500">激活卡密（永久卡/精批卡）</label>
@@ -122232,7 +122242,7 @@ async function authSubmit() {
     _authUser = d.user;
     closeAuth();
     updateAuthUI();
-    if (_authMode === "register") alert("注册成功！已赠送3天免费试用 + 2篇整篇精批，全部功能已解锁。");
+    if (_authMode === "register") alert("注册成功！赠送：3天试用 + 2篇整篇精批 + 10次AI句子批改。");
   } catch (e) {
     errEl.textContent = "网络错误，请稍后重试"; errEl.classList.remove("hidden");
   } finally {
@@ -122300,9 +122310,66 @@ function openAccount() {
     document.getElementById("accTrial").textContent = _authUser.plan === "formal" ? "已永久解锁" : "已到期";
   }
   document.getElementById("accCredits").textContent = (_authUser.essayCredits || 0) + " 篇";
+  // AI 句子批改剩余次数
+  var aiEl = document.getElementById("accAiCredits");
+  if (aiEl) {
+    if (_authUser.isBoss) aiEl.textContent = "∞ 次";
+    else if (_authUser.plan === "formal") aiEl.textContent = "无限（正式会员）";
+    else aiEl.textContent = (_authUser.aiCredits == null ? 10 : _authUser.aiCredits) + " 次";
+  }
+  // 邮箱验证区块：邮件服务已配置且未验证时才显示
+  var vbox = document.getElementById("accVerifyBox");
+  var vmsg = document.getElementById("accVerifyMsg");
+  if (vbox && vmsg) {
+    if (_authUser.emailVerified) {
+      vbox.classList.add("hidden");
+    } else if (_authUser.emailConfigured) {
+      vbox.classList.remove("hidden");
+      vmsg.textContent = "";
+    } else {
+      vbox.classList.add("hidden");
+    }
+  }
   document.getElementById("accCardInput").value = "";
   document.getElementById("accCardMsg").textContent = "";
   document.getElementById("accountModal").classList.remove("hidden");
+}
+
+async function accSendCode() {
+  var msg = document.getElementById("accVerifyMsg");
+  msg.textContent = "发送中..."; msg.className = "text-xs mt-1 text-amber-600";
+  try {
+    var res = await fetch(WORKER_URL.replace(/\/+$/,"") + "/api/auth/send-code", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token: getAuthToken() }),
+    });
+    var d = await res.json();
+    if (!d.ok) { msg.textContent = "❌ " + (d.msg || "发送失败"); msg.className = "text-xs mt-1 text-red-500"; return; }
+    msg.textContent = "✅ " + (d.msg || "验证码已发送"); msg.className = "text-xs mt-1 text-emerald-600";
+  } catch (e) {
+    msg.textContent = "❌ 网络错误"; msg.className = "text-xs mt-1 text-red-500";
+  }
+}
+
+async function accVerifyCode() {
+  var code = document.getElementById("accVcode").value.trim();
+  var msg = document.getElementById("accVerifyMsg");
+  if (!code) { msg.textContent = "请输入6位验证码"; msg.className = "text-xs mt-1 text-red-500"; return; }
+  msg.textContent = "验证中..."; msg.className = "text-xs mt-1 text-amber-600";
+  try {
+    var res = await fetch(WORKER_URL.replace(/\/+$/,"") + "/api/auth/verify-code", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token: getAuthToken(), code: code }),
+    });
+    var d = await res.json();
+    if (!d.ok) { msg.textContent = "❌ " + (d.msg || "验证失败"); msg.className = "text-xs mt-1 text-red-500"; return; }
+    _authUser = d.user;
+    msg.textContent = "✅ " + (d.msg || "验证成功"); msg.className = "text-xs mt-1 text-emerald-600";
+    document.getElementById("accAiCredits").textContent = _authUser.aiCredits + " 次";
+    setTimeout(function(){ if(document.getElementById("accVerifyBox")) document.getElementById("accVerifyBox").classList.add("hidden"); }, 1500);
+  } catch (e) {
+    msg.textContent = "❌ 网络错误"; msg.className = "text-xs mt-1 text-red-500";
+  }
 }
 function closeAccount() { document.getElementById("accountModal").classList.add("hidden"); }
 
@@ -122387,6 +122454,7 @@ function aiReview(it, userText) {
     }
     var cno = card ? card.no : "";
     if (data.cardState) applyCardState(cno, data.cardState);
+    if (typeof data.aiCreditsLeft !== "undefined" && _authUser) _authUser.aiCredits = data.aiCreditsLeft;
     updateCardUI();
     if (document.getElementById("aiBadge")) document.getElementById("aiBadge").textContent = cardDesc(getCard());
     var content = data.result || "（AI 未返回内容）";
